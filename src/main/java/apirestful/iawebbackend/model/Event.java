@@ -1,12 +1,9 @@
 package apirestful.iawebbackend.model;
 
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -32,6 +29,10 @@ public class Event {
     @NotNull
     @Column(name = "Create_date")
     private Timestamp Create_date;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Event(Long id, String name, String description, Timestamp date_Start_Event, Timestamp create_date) {
         super();
