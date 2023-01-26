@@ -1,12 +1,9 @@
 package apirestful.iawebbackend.model;
 
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -28,6 +25,9 @@ public class Rol {
     @NotNull
     @Column(name = "Create_date")
     private Timestamp Create_date;
+
+    @ManyToMany(mappedBy = "rols")
+    private Set<User> users = new HashSet<>();
 
     public Rol(Long id, String rolname, String description, Timestamp create_date) {
         super();

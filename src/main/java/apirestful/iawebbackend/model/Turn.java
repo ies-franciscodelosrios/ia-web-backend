@@ -63,6 +63,10 @@ public class Turn {
     @Column(name = "Semana",length = 100)
     private Timestamp Semana;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Turn(Long codigo, Float lunes, String lunesDescripcion, Float martes, String martesDescripcion, Float miercoles, String miercolesDescripcion, Float jueves, String juevesDescripcion, Float viernes, String viernesDescripcion, Float sabado, String sabadoDescripcion, Float domingo, String domingoDescripcion, Float total_Semana, Timestamp semana) {
         Codigo = codigo;
         Lunes = lunes;

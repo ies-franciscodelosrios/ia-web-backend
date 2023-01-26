@@ -1,10 +1,9 @@
 package apirestful.iawebbackend.model;
 
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -36,6 +35,20 @@ public class User {
 
     @Column(name = "Create_date",length = 50)
     private Timestamp Create_date;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_rols",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "rol_id")
+    )
+    private Set<Rol> rols = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Event> events = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Turn> turns = new HashSet<>();
 
     public User(String codigo, String name, String apellido1, String apellido2, String email, String login, String password, Timestamp create_date) {
         super();
