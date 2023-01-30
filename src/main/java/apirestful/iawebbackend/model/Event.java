@@ -30,20 +30,33 @@ public class Event {
     @Column(name = "Create_date")
     private Timestamp Create_date;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Event(Long id, String name, String description, Timestamp date_Start_Event, Timestamp create_date) {
+    public Event(Long id, String name, String description, Timestamp date_Start_Event, Timestamp create_date, User user) {
         super();
         this.id = id;
         Name = name;
         Description = description;
         Date_Start_Event = date_Start_Event;
         Create_date = create_date;
+        this.user = user;
     }
 
     public Event() {}
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;
@@ -80,6 +93,8 @@ public class Event {
     public void setCreate_date(Timestamp create_date) {
         Create_date = create_date;
     }
+
+
 
     @Override
     public String toString() {

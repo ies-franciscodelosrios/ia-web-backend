@@ -3,6 +3,7 @@ package apirestful.iawebbackend.controller;
 import apirestful.iawebbackend.model.Event;
 import apirestful.iawebbackend.services.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,25 +16,32 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping()
-    public List<Event> obtenerEventos(){
-        return eventService.obtenerEventos();
+    public List<Event> getEvents(){
+        return eventService.getEvents();
     }
 
 
-    //Sirve para guardar y actualizar eventos
-    @PostMapping()
-    public Event guardarEvento(@RequestBody Event evento){
-        return this.eventService.guardarEvento(evento);
+
+    @PostMapping(path = "/save/assignUser/{userid}")
+    public Event saveEvent(@RequestBody Event evento, @PathVariable String userid ){
+        return this.eventService.saveEvent(userid,evento);
     }
+
+
+    @PutMapping(path = "/update/{id}")
+    public ResponseEntity<Event> editEvent(@PathVariable Long id, @RequestBody Event evento){
+        return this.eventService.updateEvent(id,evento);
+    }
+
 
     @GetMapping(path = "/{id}")
-    public Optional<Event> obtenerEventoPorId(@PathVariable("id") Long id){
-        return this.eventService.obtenerEventoPorId(id);
+    public Optional<Event> getEventById(@PathVariable("id") Long id){
+        return this.eventService.getEventById(id);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public boolean eliminarEvento(@PathVariable("id") Long id){
-        return this.eventService.eliminarEvento(id);
+    @DeleteMapping(path = "/delete/{id}")
+    public boolean deleteEvent(@PathVariable("id") Long id){
+        return this.eventService.deleteEvent(id);
     }
 
 }
