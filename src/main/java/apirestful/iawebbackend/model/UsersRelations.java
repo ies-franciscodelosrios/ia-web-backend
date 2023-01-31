@@ -1,5 +1,7 @@
 package apirestful.iawebbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import javax.persistence.*;
@@ -10,6 +12,7 @@ import javax.validation.constraints.NotNull;
 public class UsersRelations  implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @EmbeddedId
     private UserRelationsPK userRelationsPK;
 
@@ -26,8 +29,16 @@ public class UsersRelations  implements Serializable {
     private String IdNavision2Name;
 
     @NotNull
+    @Column(name = "IdNavisionName",length = 100)
+    private String IdNavisionName;
+
+    @NotNull
     @Column(name = "IdNavision2Mail",length = 100)
     private String IdNavision2Mail;
+
+    @NotNull
+    @Column(name = "IdNavisionMail",length = 100)
+    private String IdNavisionMail;
 
     @NotNull
     @Column(name = "PersonCategory2",length = 10)
@@ -128,6 +139,26 @@ public class UsersRelations  implements Serializable {
         Active = active;
     }
 
+    public void setUserRelationsPK(UserRelationsPK userRelationsPK) {
+        this.userRelationsPK = userRelationsPK;
+    }
+
+    public String getIdNavisionName() {
+        return IdNavisionName;
+    }
+
+    public void setIdNavisionName(String idNavisionName) {
+        IdNavisionName = idNavisionName;
+    }
+
+    public String getIdNavisionMail() {
+        return IdNavisionMail;
+    }
+
+    public void setIdNavisionMail(String idNavisionMail) {
+        IdNavisionMail = idNavisionMail;
+    }
+
     @Override
     public String toString() {
         return "UsersRelations{" +
@@ -135,7 +166,9 @@ public class UsersRelations  implements Serializable {
                 ", IdNavisionIsPT=" + IdNavisionIsPT +
                 ", PersonCategory='" + PersonCategory + '\'' +
                 ", IdNavision2Name='" + IdNavision2Name + '\'' +
+                ", IdNavisionName='" + IdNavisionName + '\'' +
                 ", IdNavision2Mail='" + IdNavision2Mail + '\'' +
+                ", IdNavisionMail='" + IdNavisionMail + '\'' +
                 ", PersonCategory2='" + PersonCategory2 + '\'' +
                 ", IdNavision2IsPT=" + IdNavision2IsPT +
                 ", RelationCreateDate=" + RelationCreateDate +
