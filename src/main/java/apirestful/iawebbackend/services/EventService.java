@@ -1,16 +1,18 @@
 package apirestful.iawebbackend.services;
 
 import apirestful.iawebbackend.model.Event;
+import apirestful.iawebbackend.model.Turn;
 import apirestful.iawebbackend.model.User;
 import apirestful.iawebbackend.repository.EventRepository;
 import apirestful.iawebbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class EventService {
@@ -23,6 +25,13 @@ public class EventService {
     public List<Event> getEvents(){
         return (List<Event>) eventRepository.findAll();
     }
+
+    public Set<Event> getUserEvents(String userId) {
+        User user = userRepository.findById(userId).get();
+        return user.getEvents();
+    }
+
+
 
     public Event saveEvent(String userId, Event evento){
         User user = userRepository.findById(userId).get();
@@ -48,6 +57,19 @@ public class EventService {
             eventRepository.deleteById(id);
             return true;
         }catch (Exception err){
+            return false;
+        }
+    }
+
+    public boolean deleteUserEvents(String userId) {
+        try {
+            User user = userRepository.getById(userId);
+          for (Event event:user.getEvents()){
+              event.setUser(null);
+              eventRepository.delete(event);
+          }
+            return true;
+        } catch (Exception err) {
             return false;
         }
     }
