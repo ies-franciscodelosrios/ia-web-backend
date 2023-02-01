@@ -1,5 +1,7 @@
 package apirestful.iawebbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -57,17 +59,17 @@ public class Turn {
     private String DomingoDescripcion;
 
     @Column(name = "Total_Semana",length = 100)
-    @Transient
     private Float Total_Semana;
 
     @Column(name = "Semana",length = 100)
     private Timestamp Semana;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Turn(Long codigo, Float lunes, String lunesDescripcion, Float martes, String martesDescripcion, Float miercoles, String miercolesDescripcion, Float jueves, String juevesDescripcion, Float viernes, String viernesDescripcion, Float sabado, String sabadoDescripcion, Float domingo, String domingoDescripcion, Float total_Semana, Timestamp semana) {
+    public Turn(Long codigo, Float lunes, String lunesDescripcion, Float martes, String martesDescripcion, Float miercoles, String miercolesDescripcion, Float jueves, String juevesDescripcion, Float viernes, String viernesDescripcion, Float sabado, String sabadoDescripcion, Float domingo, String domingoDescripcion, Float total_Semana, Timestamp semana, User user) {
         Codigo = codigo;
         Lunes = lunes;
         LunesDescripcion = lunesDescripcion;
@@ -85,12 +87,25 @@ public class Turn {
         DomingoDescripcion = domingoDescripcion;
         Total_Semana = total_Semana;
         Semana = semana;
+        this.user = user;
     }
 
     public Turn() {}
 
     public Long getCodigo() {
         return Codigo;
+    }
+
+    public void setCodigo(Long codigo) {
+        Codigo = codigo;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Float getLunes() {
@@ -242,6 +257,7 @@ public class Turn {
                 ", DomingoDescripcion='" + DomingoDescripcion + '\'' +
                 ", Total_Semana=" + Total_Semana +
                 ", Semana=" + Semana +
+                ", user=" + user +
                 '}';
     }
 }

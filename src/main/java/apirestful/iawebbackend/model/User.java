@@ -123,7 +123,6 @@ public class User {
     public void setCreate_date(Timestamp create_date) {
         Create_date = create_date;
     }
-
     @Override
     public String toString() {
         return "User{" +
