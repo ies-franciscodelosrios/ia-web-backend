@@ -25,10 +25,7 @@ public class EventService {
     }
 
     public Event saveEvent(String userId, Event evento){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User user = userRepository.findById(userId).get();
-        String hash = encoder.encode(user.getPassword());
-        user.setPassword(hash);
         evento.setUser(user);
         return eventRepository.save(evento);
     }
