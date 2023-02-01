@@ -30,7 +30,7 @@ public class User {
     @Column(name = "Login",length = 50)
     private String Login;
 
-    @Column(name = "Password",length = 50)
+    @Column(name = "Password",length = 60)
     private String Password;
 
     @Column(name = "Create_date",length = 50)
@@ -60,12 +60,20 @@ public class User {
         Login = login;
         Password = password;
         Create_date = create_date;
+        turns= new HashSet<>();
+        events= new HashSet<>();
+        rols= new HashSet<>();
     }
+
 
     public User() {}
 
     public String getCodigo() {
         return Codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        Codigo = codigo;
     }
 
     public String getName() {
@@ -123,6 +131,31 @@ public class User {
     public void setCreate_date(Timestamp create_date) {
         Create_date = create_date;
     }
+
+    public Set<Rol> getRols() {
+        return rols;
+    }
+
+    public void setRols(Set<Rol> rols) {
+        this.rols = rols;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
+
+    public Set<Turn> getTurns() {
+        return turns;
+    }
+
+    public void setTurns(Set<Turn> turns) {
+        this.turns = turns;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -134,6 +167,9 @@ public class User {
                 ", Login='" + Login + '\'' +
                 ", Password='" + Password + '\'' +
                 ", Create_date=" + Create_date +
+                ", rols=" + rols +
+                ", events=" + events +
+                ", turns=" + turns +
                 '}';
     }
 }
