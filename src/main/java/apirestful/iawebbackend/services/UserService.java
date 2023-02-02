@@ -40,7 +40,9 @@ public class UserService {
      */
     public User createUser(User user) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
 
-        if (user != null) {
+        User login = userRepository.getByIdNavision(user.getLogin());
+
+        if(login == null){
             try {
                 user = userRepository.save(user);
                 return user;
@@ -49,8 +51,8 @@ public class UserService {
                         "Los valores introducidos no son correctos" + "IllegalArgumentException: " + e);
             }
 
-        } else {
-            throw new NullPointerException("Valor nulo");
+        }else{
+            throw new RecordNotFoundException("El nombre ya existe");
         }
     }
 

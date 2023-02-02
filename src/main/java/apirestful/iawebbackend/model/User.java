@@ -26,8 +26,13 @@ public class User {
     @Column(name = "Email",length = 200)
     private String Email;
 
+    @Column(name = "Profile_Picture")
+    private String Profile_Picture;
+
+
+
     @NotNull
-    @Column(name = "Login",length = 50)
+    @Column(name = "Login",length = 50,unique = true)
     private String Login;
 
     @Column(name = "Password",length = 60)
@@ -50,13 +55,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Turn> turns = new HashSet<>();
 
-    public User(String codigo, String name, String apellido1, String apellido2, String email, String login, String password, Timestamp create_date) {
+    public User(String codigo, String name, String apellido1,String image , String apellido2, String email, String login, String password, Timestamp create_date) {
         super();
         Codigo = codigo;
         Name = name;
         Apellido1 = apellido1;
         Apellido2 = apellido2;
         Email = email;
+        Profile_Picture=image;
         Login = login;
         Password = password;
         Create_date = create_date;
@@ -106,6 +112,14 @@ public class User {
 
     public void setEmail(String email) {
         Email = email;
+    }
+
+    public String getProfile_Picture() {
+        return Profile_Picture;
+    }
+
+    public void setProfile_Picture(String profile_Picture) {
+        Profile_Picture = profile_Picture;
     }
 
     public String getLogin() {
@@ -170,6 +184,7 @@ public class User {
                 ", rols=" + rols +
                 ", events=" + events +
                 ", turns=" + turns +
+                ", image=" + Profile_Picture +
                 '}';
     }
 }
