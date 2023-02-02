@@ -1,5 +1,7 @@
 package apirestful.iawebbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,20 +32,34 @@ public class Event {
     @Column(name = "Create_date")
     private Timestamp Create_date;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Event(Long id, String name, String description, Timestamp date_Start_Event, Timestamp create_date) {
+    public Event(Long id, String name, String description, Timestamp date_Start_Event, Timestamp create_date, User user) {
         super();
         this.id = id;
         Name = name;
         Description = description;
         Date_Start_Event = date_Start_Event;
         Create_date = create_date;
+        this.user = user;
     }
 
     public Event() {}
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;
@@ -81,9 +97,11 @@ public class Event {
         Create_date = create_date;
     }
 
+
+
     @Override
     public String toString() {
         return "Event [id=" + id + ", Name=" + Name + ", Description=" + Description + ", Date_Start_Event="
-                + Date_Start_Event + ", Create_date=" + Create_date + "]";
+                + Date_Start_Event + ", Create_date=" + Create_date ;
     }
 }

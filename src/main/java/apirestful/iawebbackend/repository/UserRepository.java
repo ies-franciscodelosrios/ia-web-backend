@@ -2,11 +2,13 @@ package apirestful.iawebbackend.repository;
 
 import apirestful.iawebbackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
     //Consulta para buscar a los ninos por el nombre (filtro de busqueda)
@@ -24,3 +26,4 @@ public interface UserRepository extends JpaRepository<User, String> {
     boolean existsByNombre(@Param("login") String login);
 
 }
+
