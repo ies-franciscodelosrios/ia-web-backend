@@ -13,14 +13,27 @@ public class CloudinaryController {
     CloudinaryService cloudinaryService;
 
     /**
-     * Upload a MultipartFile to Cloudinary.
+     * Subir un MultipartFile a Cloudinary.
      * @param file
-     * @return the publicId assigned to the uploaded file, or null in case of
+     * @return la URL asignada al archivo subido o null en su caso
      * error
      */
     @PostMapping("/upload/{codigo}")
     public @ResponseBody
     String upload(@RequestBody MultipartFile file, @PathVariable ("codigo") String codigo) {
+        return cloudinaryService.uploadPhoto(file,codigo);
+    }
+
+
+    /**
+     * Subir un MultipartFile a Cloudinary para sustituir al que ya hay.
+     * @param file
+     * @return la URL asignada al archivo subido o null en su caso
+     * error
+     */
+    @PutMapping("/update/{codigo}")
+    public @ResponseBody
+    String update(@RequestBody MultipartFile file, @PathVariable ("codigo") String codigo) {
         return cloudinaryService.uploadPhoto(file,codigo);
     }
 

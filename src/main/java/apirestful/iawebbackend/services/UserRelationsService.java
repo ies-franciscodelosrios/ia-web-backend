@@ -19,7 +19,6 @@ public class UserRelationsService {
 
 
     /**
-     *
      * @return Una lista de todos las relaciones con usuario de la BBDD
      * @throws RecordNotFoundException
      */
@@ -36,7 +35,9 @@ public class UserRelationsService {
     /**
      * @param UserRelation
      * @return Crea una relacion entre dos usuarios con los parametros pasados en la BBDD
-     * @throws RecordNotFoundException,NullPointerException,IllegalArgumentException
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
      */
     public UsersRelations createUserRelation(UsersRelations UserRelation) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
         if (UserRelation != null) {
@@ -57,7 +58,9 @@ public class UserRelationsService {
     /**
      * @param pk
      * @return Desactiva la relacion de un usuario con otro dejando el campo active a false
-     * @throws RecordNotFoundException,NullPointerException,IllegalArgumentException
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
      */
     public UsersRelations UpdateUserRelation(UserRelationsPK pk) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
         if (pk != null) {
@@ -81,7 +84,9 @@ public class UserRelationsService {
     /**
      * @param pk
      * @return Obtenemos una relacion entre dos usuarios en concretos, en funcion del idNavision de cada uno
-     * @throws RecordNotFoundException,NullPointerException,IllegalArgumentException
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
      */
     public UsersRelations getUserByIdNavision(UserRelationsPK pk) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
         if (pk != null) {

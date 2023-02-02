@@ -29,8 +29,6 @@ public class User {
     @Column(name = "Profile_Picture")
     private String Profile_Picture;
 
-
-
     @NotNull
     @Column(name = "Login",length = 50,unique = true)
     private String Login;

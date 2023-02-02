@@ -16,10 +16,8 @@ public class UserService {
 
 
     /**
-     *
      * @return Una lista de todos los usuarios de la BBDD
      * @throws RecordNotFoundException
-     *
      */
     public List<User> getAllUsers() throws RecordNotFoundException {
 
@@ -32,11 +30,12 @@ public class UserService {
 
     }
 
-
     /**
      * @param user
-     * @return Usuario con unos determinados parámetros
-     * @throws RecordNotFoundException,NullPointerException,IllegalArgumentException
+     * @return Usuario creado con unos determinados parámetros establecidos por el usuario
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
      */
     public User createUser(User user) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
 
@@ -44,7 +43,14 @@ public class UserService {
 
         if(login == null){
             try {
-                user = userRepository.save(user);
+                if(user.getProfile_Picture()==""){
+                    user.setProfile_Picture("https://res.cloudinary.com/dmcgwm5nm/image/upload/v1675328193/default_profile_ugadft.png");
+                    user = userRepository.save(user);
+                }else{
+
+                    user = userRepository.save(user);
+
+                }
                 return user;
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(
@@ -58,10 +64,12 @@ public class UserService {
 
 
     /**
+     *
      * @param user
      * @return un usuario que ya existe actualizado con nuevos valores
-     * @throws RecordNotFoundException, NullPointerException, IllegalArgumentException
-     *
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
      */
     public User updateUser(User user) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
 
@@ -84,10 +92,11 @@ public class UserService {
 
 
     /**
+     * @return borra a un usuario en concreto con el id pasado por parametro (DNI)
      * @param codigo
-     * @return borra a un usuario en concreto con el id pasado por parametro (CÓDIGO)
-     * @throws RecordNotFoundException, IllegalArgumentException, NullPointerException
-     *
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
      */
     public void deleteUserByDNI(String codigo) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
         if (codigo != null) {
@@ -108,10 +117,11 @@ public class UserService {
 
 
     /**
-     * @param id_navision
      * @return borra a un usuario en concreto con el id pasado por parametro (IDNAVISION)
-     * @throws RecordNotFoundException, IllegalArgumentException, NullPointerException
-     *
+     * @param id_navision
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
      */
     public void deleteUserByIdNavision(String id_navision) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
         System.out.print(id_navision);
@@ -130,10 +140,12 @@ public class UserService {
     }
 
     /**
-     * @param codigo
      * @return un USUARIO en concreto de la BBDD con el id (CÓDIGO) pasado por parametro
-     * @throws RecordNotFoundException, NullPointerException,IllegalArgumentException
-     *
+     * @param codigo
+     * @return
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
      */
     public User getUserById(String codigo) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
         if (codigo != null) {
@@ -153,10 +165,12 @@ public class UserService {
     }
 
     /**
-     * @param idnavision
-     * @return un usuario en concreto de la BBDD con el nombre concreto pasado por parametro
-     * @throws RecordNotFoundException, NullPointerException, IllegalArgumentException
      *
+     * @param idnavision
+     * @return un usuario en concreto de la BBDD con el IDnavision concreto pasado por parametro
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
      */
     public User  getUserByIdNavision(String idnavision) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
         if (idnavision != null) {
