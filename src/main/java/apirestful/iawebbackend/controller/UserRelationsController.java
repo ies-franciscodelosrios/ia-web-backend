@@ -21,6 +21,9 @@ public class UserRelationsController {
     private UserRelationsService userRelationsService;
 
 
+    /**
+     * @return todas las relaciones entre usuarios de la base de datos
+     */
     @GetMapping
     public ResponseEntity<List<UsersRelations>> getAllUsersRelations() {
         try {
@@ -33,6 +36,12 @@ public class UserRelationsController {
     }
 
 
+    /**
+     * @param id1
+     * @param id2
+     * @return actualizar una relacion entre dos usuarios (Si sigue activa o no)
+     * @throws ResponseStatusException
+     */
     @PutMapping("/{id1}/{id2}")
     public ResponseEntity<UsersRelations> updateUserRelation(@PathVariable String id1, @PathVariable String id2) throws ResponseStatusException {
         if (id1 != null) {
@@ -54,6 +63,12 @@ public class UserRelationsController {
     }
 
 
+    /**
+     * @param id1
+     * @param id2
+     * @return obtener una relacion en concreto entre dos usuarios por el IDnavision (si existiera)
+     * @throws ResponseStatusException
+     */
     @GetMapping("/{id1}/{id2}")
     public ResponseEntity<UsersRelations> getUserRelationbyIDNavision(@PathVariable String id1, @PathVariable String id2) throws ResponseStatusException {
         if (id1 != null) {
@@ -75,6 +90,11 @@ public class UserRelationsController {
     }
 
 
+    /**
+     * @param n
+     * @return crear una relacion entre dos usuarios
+     * @throws ResponseStatusException
+     */
     @PostMapping
     public ResponseEntity<UsersRelations> createUserRelation(@RequestBody UsersRelations n) throws ResponseStatusException {
         if (n != null) {

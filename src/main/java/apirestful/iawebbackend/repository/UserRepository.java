@@ -22,5 +22,6 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query(value = "DELETE FROM USER AS a WHERE a.codigo LIKE ?",nativeQuery = true)
     User deleteByCodigo(String codigo);
 
+
 }
 

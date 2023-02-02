@@ -9,14 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -28,6 +25,9 @@ public class UserController {
     private UserService userService;
 
 
+    /**
+     * @return todos los usuarios de la base de datos
+     */
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
         try {
@@ -40,6 +40,11 @@ public class UserController {
     }
 
 
+    /**
+     * @param codigo
+     * @return un usuario en concreto por su DNI
+     * @throws ResponseStatusException
+     */
     @GetMapping("/search/dni/{codigo}")
     public ResponseEntity<User> getUserById(@PathVariable("codigo") String codigo) throws ResponseStatusException {
 
@@ -56,6 +61,11 @@ public class UserController {
 
     }
 
+    /**
+     * @param idnavision
+     * @return un usuario en concreto por su IDNAVISION
+     * @throws ResponseStatusException
+     */
     @GetMapping("/search/id/{idnavision}")
     public ResponseEntity<User> getUserByIdNavision(@PathVariable("idnavision") String idnavision) throws ResponseStatusException {
 
@@ -73,12 +83,17 @@ public class UserController {
     }
 
 
+    /**
+     * @param user
+     * @return crear un usuario
+     * @throws ResponseStatusException
+     */
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) throws ResponseStatusException {
         if (user != null) {
             try {
-                User kid = userService.createUser(user);
-                return new ResponseEntity<User>(kid, new HttpHeaders(), HttpStatus.OK);
+                User createuser = userService.createUser(user);
+                return new ResponseEntity<User>(createuser, new HttpHeaders(), HttpStatus.OK);
             } catch (ResponseStatusException e) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El usuario no ha sido guardado correctamente", e);
             }
@@ -88,7 +103,11 @@ public class UserController {
     }
 
 
-
+    /**
+     * @param user
+     * @return un usuario actualizado ya existente con valores cambiados
+     * @throws ResponseStatusException
+     */
     @PutMapping
     public ResponseEntity<User> UpdateUser(@RequestBody User user) throws ResponseStatusException {
         if (user != null ) {
@@ -105,6 +124,11 @@ public class UserController {
 
     }
 
+    /**
+     * @param codigo
+     * @return un usuario eliminado por su IDnavision
+     * @throws ResponseStatusException
+     */
     @DeleteMapping("/delete/id/{codigo}")
     public HttpStatus deleteUserbyIDnavision(@PathVariable("codigo") String codigo) throws ResponseStatusException {
         System.out.print(codigo);
@@ -124,7 +148,11 @@ public class UserController {
 
     }
 
-
+    /**
+     * @param codigo
+     * @return un usuario eliminado por su id
+     * @throws ResponseStatusException
+     */
     @DeleteMapping("/delete/dni/{codigo}")
     public HttpStatus deleteUserbyDNI(@PathVariable("codigo") String codigo) throws ResponseStatusException {
         System.out.print(codigo);
