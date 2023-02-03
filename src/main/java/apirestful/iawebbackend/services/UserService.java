@@ -4,6 +4,7 @@ import apirestful.iawebbackend.exceptions.RecordNotFoundException;
 import apirestful.iawebbackend.model.User;
 import apirestful.iawebbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class UserService {
     public User createUser(User user) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
 
         User login = userRepository.getByIdNavision(user.getLogin());
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
         if(login == null){
             try {

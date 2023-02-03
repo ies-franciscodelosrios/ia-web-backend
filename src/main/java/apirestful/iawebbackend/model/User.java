@@ -36,6 +36,15 @@ public class User {
     @Column(name = "Password",length = 60)
     private String Password;
 
+    @Column(name = "Puesto", length = 60)
+    private String Puesto;
+
+    @Column(name = "Oficina", length = 60)
+    private String Oficina;
+
+    @Column(name = "Pais", length = 60)
+    private String Pais;
+
     @Column(name = "Create_date",length = 50)
     private Timestamp Create_date;
 
@@ -53,22 +62,23 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Turn> turns = new HashSet<>();
 
-    public User(String codigo, String name, String apellido1,String image , String apellido2, String email, String login, String password, Timestamp create_date) {
-        super();
+    public User(String codigo, String name, String apellido1, String apellido2, String email, String profile_Picture, String login, String password, String puesto, String oficina, String pais, Timestamp create_date, Set<Rol> rols, Set<Event> events, Set<Turn> turns) {
         Codigo = codigo;
         Name = name;
         Apellido1 = apellido1;
         Apellido2 = apellido2;
         Email = email;
-        Profile_Picture=image;
+        Profile_Picture = profile_Picture;
         Login = login;
         Password = password;
+        Puesto = puesto;
+        Oficina = oficina;
+        Pais = pais;
         Create_date = create_date;
-        turns= new HashSet<>();
-        events= new HashSet<>();
-        rols= new HashSet<>();
+        this.rols = rols;
+        this.events = events;
+        this.turns = turns;
     }
-
 
     public User() {}
 
@@ -136,6 +146,30 @@ public class User {
         Password = password;
     }
 
+    public String getPuesto() {
+        return Puesto;
+    }
+
+    public void setPuesto(String puesto) {
+        Puesto = puesto;
+    }
+
+    public String getOficina() {
+        return Oficina;
+    }
+
+    public void setOficina(String oficina) {
+        Oficina = oficina;
+    }
+
+    public String getPais() {
+        return Pais;
+    }
+
+    public void setPais(String pais) {
+        Pais = pais;
+    }
+
     public Timestamp getCreate_date() {
         return Create_date;
     }
@@ -176,13 +210,16 @@ public class User {
                 ", Apellido1='" + Apellido1 + '\'' +
                 ", Apellido2='" + Apellido2 + '\'' +
                 ", Email='" + Email + '\'' +
+                ", Profile_Picture='" + Profile_Picture + '\'' +
                 ", Login='" + Login + '\'' +
                 ", Password='" + Password + '\'' +
+                ", Puesto='" + Puesto + '\'' +
+                ", Oficina='" + Oficina + '\'' +
+                ", Pais='" + Pais + '\'' +
                 ", Create_date=" + Create_date +
                 ", rols=" + rols +
                 ", events=" + events +
                 ", turns=" + turns +
-                ", image=" + Profile_Picture +
                 '}';
     }
 }
