@@ -24,9 +24,9 @@ public class CloudinaryService {
      * Constructor de Cloudinary con los parámetros de la API para conectarse a ella
      */
     Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-            "cloud_name", "dmcgwm5nm",
-            "api_key", "791175161344374",
-            "api_secret", "qIeeadio8YTwpehl8dZ1satXiSU",
+            "cloud_name", "dgzlsuwnt",
+            "api_key", "941853375929259",
+            "api_secret", "pnDDq0I0worwC252ijbwohp-Oj8",
             "secure", true));
 
 

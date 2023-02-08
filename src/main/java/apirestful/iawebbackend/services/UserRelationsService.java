@@ -8,9 +8,7 @@ import apirestful.iawebbackend.repository.UserRelationsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserRelationsService {
@@ -92,6 +90,55 @@ public class UserRelationsService {
         if (pk != null) {
             try {
                 UsersRelations ur = userRelationsRepository.getReferenceById(pk);
+                return ur;
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException(
+                        "Los valores introducidos no son correctos" + "IllegalArgumentException: " + e);
+            }
+
+        } else {
+            throw new NullPointerException("Valor nulo");
+        }
+
+    }
+
+
+
+    /**
+     * @param pk
+     * @return Obtenemos una relacion entre dos usuarios en concretos, en funcion del idNavision de cada uno
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public String getActiveRelationsByUser(String pk) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        if (pk != null) {
+            try {
+                String ur = userRelationsRepository.getActivateRelations(pk);
+                return ur;
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException(
+                        "Los valores introducidos no son correctos" + "IllegalArgumentException: " + e);
+            }
+
+        } else {
+            throw new NullPointerException("Valor nulo");
+        }
+
+    }
+
+
+    /**
+     * @param pk
+     * @return Obtenemos una relacion entre dos usuarios en concretos, en funcion del idNavision de cada uno
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public List<String> getNameActiveRelationsByUser(String pk) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        if (pk != null) {
+            try {
+                List<String> ur = userRelationsRepository.getActivateRelationsName(pk);
                 return ur;
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(
