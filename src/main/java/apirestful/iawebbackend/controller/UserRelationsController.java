@@ -90,6 +90,60 @@ public class UserRelationsController {
     }
 
 
+
+    /**
+     * @param id1
+     * @return obtener una relacion en concreto entre dos usuarios por el IDnavision (si existiera)
+     * @throws ResponseStatusException
+     */
+    @GetMapping("/count/{id1}")
+    public ResponseEntity<String> getUserRelationbyIDNavision(@PathVariable String id1) throws ResponseStatusException {
+        if (id1 != null) {
+            try {
+                UserRelationsPK id= new UserRelationsPK();
+                id.setIdNavision(id1);
+                id.setIdNavision2("");
+                String ur= userRelationsService.getActiveRelationsByUser(id.getIdNavision());
+                return new ResponseEntity<String>(ur, new HttpHeaders(), HttpStatus.OK);
+            } catch (ResponseStatusException e) {
+
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El ni�o no ha sido eliminado correctamente",
+                        e);
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La peticion no se ha realizado correctamente");
+        }
+
+    }
+
+
+
+    /**
+     * @param id1
+     * @return obtener una relacion en concreto entre dos usuarios por el IDnavision (si existiera)
+     * @throws ResponseStatusException
+     */
+    @GetMapping("/name/{id1}")
+    public ResponseEntity<List<String>> getUserRelationNamebyIDNavision(@PathVariable String id1) throws ResponseStatusException {
+        if (id1 != null) {
+            try {
+                UserRelationsPK id= new UserRelationsPK();
+                id.setIdNavision(id1);
+                id.setIdNavision2("");
+                List<String> ur= userRelationsService.getNameActiveRelationsByUser(id.getIdNavision());
+                return new ResponseEntity<List<String>>(ur, new HttpHeaders(), HttpStatus.OK);
+            } catch (ResponseStatusException e) {
+
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El ni�o no ha sido eliminado correctamente",
+                        e);
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La peticion no se ha realizado correctamente");
+        }
+
+    }
+
+
     /**
      * @param n
      * @return crear una relacion entre dos usuarios
