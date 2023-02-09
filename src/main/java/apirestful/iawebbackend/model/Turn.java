@@ -11,8 +11,7 @@ import javax.validation.constraints.NotNull;
 public class Turn {
     @Id
     @NotNull
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Codigo",length = 10)
+    @Column(name = "Codigo")
     private Long Codigo;
 
     @Column(name = "Lunes",length = 100)
