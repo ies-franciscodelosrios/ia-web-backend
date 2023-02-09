@@ -38,20 +38,20 @@ public class TurnController {
         }
     }
 
-    @GetMapping("/getUserTurns/{userId}")
-    public ResponseEntity<Set<Turn>> getUserTurns(@PathVariable String userId) {
+    @GetMapping("/getUserTurns/{IdNavision}")
+    public ResponseEntity<Set<Turn>> getUserTurns(@PathVariable String IdNavision) {
         try {
-            return new ResponseEntity<Set<Turn>>(turnService.getUserTurns(userId), new HttpHeaders(), HttpStatus.OK);
+            return new ResponseEntity<Set<Turn>>(turnService.getUserTurns(IdNavision), new HttpHeaders(), HttpStatus.OK);
         }
         catch (ResponseStatusException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe un usuario con ese identificador");
         }
     }
 
-    @PostMapping("/save/assignUser/{userId}")
-    public ResponseEntity<Turn> createTurn(@RequestBody Turn turn, @PathVariable String userId) {
+    @PostMapping("/save/assignUser/{IdNavision}")
+    public ResponseEntity<Turn> createTurn(@RequestBody Turn turn, @PathVariable String IdNavision) {
         try {
-            return new ResponseEntity<Turn>(turnService.createTurn(turn, userId), new HttpHeaders(), HttpStatus.OK);
+            return new ResponseEntity<Turn>(turnService.createTurn(turn, IdNavision), new HttpHeaders(), HttpStatus.OK);
         }
         catch (ResponseStatusException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe un usuario con ese identificador");

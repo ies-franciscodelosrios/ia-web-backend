@@ -25,16 +25,22 @@ public class TurnService {
     }
 
     public Turn getTurnById(Long turnId) {
+        Optional<Turn> OptionalTurn = turnRepository.findById(turnId);
+
+        if(!OptionalTurn.isPresent()){
+            return null;
+        }
+
         return turnRepository.findById(turnId).get();
     }
 
-    public Set<Turn> getUserTurns(String userId) {
-        User user = userRepository.findById(userId).get();
+    public Set<Turn> getUserTurns(String IdNavision) {
+        User user = userRepository.getByIdNavision(IdNavision);
         return user.getTurns();
     }
 
-    public Turn createTurn(Turn turn, String userId) {
-        User user = userRepository.findById(userId).get();
+    public Turn createTurn(Turn turn, String IdNavision) {
+        User user = userRepository.getByIdNavision(IdNavision);
         turn.setUser(user);
         return turnRepository.save(turn);
     }
