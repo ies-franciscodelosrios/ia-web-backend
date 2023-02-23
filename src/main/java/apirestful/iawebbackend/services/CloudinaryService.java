@@ -1,12 +1,15 @@
 package apirestful.iawebbackend.services;
 
+import apirestful.iawebbackend.exceptions.RecordNotFoundException;
 import apirestful.iawebbackend.model.User;
 import apirestful.iawebbackend.repository.UserRepository;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.io.File;
@@ -31,27 +34,29 @@ public class CloudinaryService {
 
 
     /**
-     *  Método para subir a cloudinary a traves de su API una imagen subida por el usuario
+     * Method to upload a profile photo to Cloudinary
      * @param file
-     * @param codigo
-     * @return URL de la imagen subibda por el usuario
+     * @param idnavision
+     * @return a profile photo on Cloudinary
      */
-    public String uploadPhoto(MultipartFile file, String codigo) {
-        try {
-            User userbyID = userRepository.getByCodigo(codigo);
-            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-            String publicId = uploadResult.get("url").toString();
-            userbyID.setProfile_Picture(publicId);
-            userRepository.save(userbyID);
-            return publicId;
-        } catch (Exception ex) {
-            ex.getMessage();
-            return null;
+    public String uploadPhoto(MultipartFile file, String idnavision) throws RecordNotFoundException, NullPointerException, IllegalArgumentException  {
+            if (file != null && idnavision != null) {
+                try {
+                    User userbyID = userRepository.getByIdNavision(idnavision);
+                    if(userbyID!=null ){
+                        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+                        String publicId = uploadResult.get("url").toString();
+                        userbyID.setProfile_Picture(publicId);
+                        userRepository.save(userbyID);
+                        return publicId;
+                    }else{
+                        throw new RecordNotFoundException("The user with IdNavision: " + idnavision + " dont exist");
+                    }
+                } catch (Exception e) {
+                    throw new IllegalArgumentException(e);
+                }
+            } else {
+                throw new NullPointerException("Null value");
         }
-
+      }
     }
-
-
-
-
-}
