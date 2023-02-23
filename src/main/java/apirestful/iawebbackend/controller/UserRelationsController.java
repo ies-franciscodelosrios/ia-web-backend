@@ -5,6 +5,9 @@ import apirestful.iawebbackend.model.User;
 import apirestful.iawebbackend.model.UserRelationsPK;
 import apirestful.iawebbackend.model.UsersRelations;
 import apirestful.iawebbackend.services.UserRelationsService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,9 +25,17 @@ public class UserRelationsController {
 
 
     /**
-     * @return todas las relaciones entre usuarios de la base de datos
+     * @return a list of all User-Relations
      */
-    @GetMapping
+    @ApiOperation(value = "Get a all User-Relations", notes = "Return a list of all User-Relations")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
+    @GetMapping("/all")
     public ResponseEntity<List<UsersRelations>> getAllUsersRelations() {
         try {
             List<UsersRelations> all = userRelationsService.getAllUserRelations();
@@ -39,26 +50,37 @@ public class UserRelationsController {
     /**
      * @param id1
      * @param id2
-     * @return actualizar una relacion entre dos usuarios (Si sigue activa o no)
+     * @return a User-Relation updated
      * @throws ResponseStatusException
      */
-    @PutMapping("/{id1}/{id2}")
-    public ResponseEntity<UsersRelations> updateUserRelation(@PathVariable String id1, @PathVariable String id2) throws ResponseStatusException {
-        if (id1 != null) {
-            try {
-                UserRelationsPK id= new UserRelationsPK();
-                id.setIdNavision(id1);
-                id.setIdNavision2(id2);
-                UsersRelations ur= userRelationsService.UpdateUserRelation(id);
-                return new ResponseEntity<UsersRelations>(ur, new HttpHeaders(), HttpStatus.OK);
-            } catch (ResponseStatusException e) {
-
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El ni�o no ha sido eliminado correctamente",
-                        e);
+    @ApiOperation(value = "Update a User-Relation", notes = "Return a User-Relation updated")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
+    @PutMapping
+    public ResponseEntity<UsersRelations> updateUserRelation(@RequestHeader String id1, @RequestHeader String id2) throws ResponseStatusException {
+        try {
+            if (id1 != null) {
+                try {
+                    UserRelationsPK id= new UserRelationsPK();
+                    id.setIdNavision(id1);
+                    id.setIdNavision2(id2);
+                    UsersRelations ur= userRelationsService.UpdateUserRelation(id);
+                    return new ResponseEntity<UsersRelations>(ur, new HttpHeaders(), HttpStatus.OK);
+                } catch (ResponseStatusException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data "+e);
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The User-Relation has not found");
             }
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La peticion no se ha realizado correctamente");
+        }catch (ResponseStatusException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission",e);
         }
+
 
     }
 
@@ -66,100 +88,106 @@ public class UserRelationsController {
     /**
      * @param id1
      * @param id2
-     * @return obtener una relacion en concreto entre dos usuarios por el IDnavision (si existiera)
+     * @return a User-Relation between two persons
      * @throws ResponseStatusException
      */
-    @GetMapping("/{id1}/{id2}")
-    public ResponseEntity<UsersRelations> getUserRelationbyIDNavision(@PathVariable String id1, @PathVariable String id2) throws ResponseStatusException {
-        if (id1 != null) {
-            try {
-                UserRelationsPK id= new UserRelationsPK();
-                id.setIdNavision(id1);
-                id.setIdNavision2(id2);
-                UsersRelations ur= userRelationsService.getUserByIdNavision(id);
-                return new ResponseEntity<UsersRelations>(ur, new HttpHeaders(), HttpStatus.OK);
-            } catch (ResponseStatusException e) {
-
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El ni�o no ha sido eliminado correctamente",
-                        e);
+    @ApiOperation(value = "Get a User-Relation between two persons", notes = "Return a User-Relation between two persons")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
+    @GetMapping
+    public ResponseEntity<UsersRelations> getUserRelationbyIDNavision(@RequestHeader String id1, @RequestHeader String id2) throws ResponseStatusException {
+        try {
+            if (id1 != null) {
+                try {
+                    UserRelationsPK id= new UserRelationsPK();
+                    id.setIdNavision(id1);
+                    id.setIdNavision2(id2);
+                    UsersRelations ur= userRelationsService.getUserByIdNavision(id);
+                    return new ResponseEntity<UsersRelations>(ur, new HttpHeaders(), HttpStatus.OK);
+                } catch (ResponseStatusException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data "+e);
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The User-Relation has not found");
             }
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La peticion no se ha realizado correctamente");
+        }catch (ResponseStatusException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission",e);
         }
 
+
     }
+
 
 
 
     /**
      * @param id1
-     * @return obtener una relacion en concreto entre dos usuarios por el IDnavision (si existiera)
+     * @return a User-Relation active by IdNavision
      * @throws ResponseStatusException
      */
-    @GetMapping("/count/{id1}")
-    public ResponseEntity<String> getUserRelationbyIDNavision(@PathVariable String id1) throws ResponseStatusException {
-        if (id1 != null) {
-            try {
-                UserRelationsPK id= new UserRelationsPK();
-                id.setIdNavision(id1);
-                id.setIdNavision2("");
-                String ur= userRelationsService.getActiveRelationsByUser(id.getIdNavision());
-                return new ResponseEntity<String>(ur, new HttpHeaders(), HttpStatus.OK);
-            } catch (ResponseStatusException e) {
-
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El ni�o no ha sido eliminado correctamente",
-                        e);
+    @ApiOperation(value = "Get a User-Relation active by IdNavision", notes = "Return a User-Relation active by IdNavision")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
+    @GetMapping("/active")
+    public ResponseEntity<List<String>> getUserRelationNamebyIDNavision(@RequestHeader String id1) throws ResponseStatusException {
+        try {
+            if (id1 != null) {
+                try {
+                    UserRelationsPK id= new UserRelationsPK();
+                    id.setIdNavision(id1);
+                    id.setIdNavision2("");
+                    List<String> ur= userRelationsService.getNameActiveRelationsByUser(id.getIdNavision());
+                    return new ResponseEntity<List<String>>(ur, new HttpHeaders(), HttpStatus.OK);
+                } catch (ResponseStatusException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data "+e);
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The User-Relation has not found");
             }
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La peticion no se ha realizado correctamente");
+        }catch (ResponseStatusException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission",e);
         }
-
-    }
-
-
-
-    /**
-     * @param id1
-     * @return obtener una relacion en concreto entre dos usuarios por el IDnavision (si existiera)
-     * @throws ResponseStatusException
-     */
-    @GetMapping("/name/{id1}")
-    public ResponseEntity<List<String>> getUserRelationNamebyIDNavision(@PathVariable String id1) throws ResponseStatusException {
-        if (id1 != null) {
-            try {
-                UserRelationsPK id= new UserRelationsPK();
-                id.setIdNavision(id1);
-                id.setIdNavision2("");
-                List<String> ur= userRelationsService.getNameActiveRelationsByUser(id.getIdNavision());
-                return new ResponseEntity<List<String>>(ur, new HttpHeaders(), HttpStatus.OK);
-            } catch (ResponseStatusException e) {
-
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El ni�o no ha sido eliminado correctamente",
-                        e);
-            }
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La peticion no se ha realizado correctamente");
-        }
-
     }
 
 
     /**
-     * @param n
-     * @return crear una relacion entre dos usuarios
+     * @param userelation
+     * @return a User-Relation created
      * @throws ResponseStatusException
      */
+    @ApiOperation(value = "Create a User-Relation", notes = "Return a User-Relation created")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
     @PostMapping
-    public ResponseEntity<UsersRelations> createUserRelation(@RequestBody UsersRelations n) throws ResponseStatusException {
-        if (n != null) {
-            try {
-                UsersRelations kid = userRelationsService.createUserRelation(n);
-                return new ResponseEntity<UsersRelations>(kid, new HttpHeaders(), HttpStatus.OK);
-            } catch (ResponseStatusException e) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El nino no ha sido guardado correctamente", e);
+    public ResponseEntity<UsersRelations> createUserRelation(@RequestBody UsersRelations userelation) throws ResponseStatusException {
+        try {
+            if (userelation != null) {
+                try {
+                    UsersRelations kid = userRelationsService.createUserRelation(userelation);
+                    return new ResponseEntity<UsersRelations>(kid, new HttpHeaders(), HttpStatus.OK);
+                } catch (ResponseStatusException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data " + e);
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The User-Relation has not found");
             }
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La peticion no se ha realizado correctamente");
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission", e);
         }
     }
 }

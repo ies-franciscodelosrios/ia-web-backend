@@ -1,6 +1,9 @@
 package apirestful.iawebbackend.controller;
 
 import apirestful.iawebbackend.services.CloudinaryService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,29 +15,26 @@ public class CloudinaryController {
     @Autowired
     CloudinaryService cloudinaryService;
 
+
+
     /**
-     * Subir un MultipartFile a Cloudinary.
+     * Method to upload a profile photo to Cloudinary
      * @param file
      * @return la URL asignada al archivo subido o null en su caso
      * error
      */
-    @PostMapping("/upload/{codigo}")
+    @ApiOperation(value = "Upload to Cloudinary a profile photo", notes = "Return a profile photo on Cloudinary")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
+    @PutMapping()
     public @ResponseBody
-    String upload(@RequestBody MultipartFile file, @PathVariable ("codigo") String codigo) {
-        return cloudinaryService.uploadPhoto(file,codigo);
-    }
-
-
-    /**
-     * Subir un MultipartFile a Cloudinary para sustituir al que ya hay.
-     * @param file
-     * @return la URL asignada al archivo subido o null en su caso
-     * error
-     */
-    @PutMapping("/update/{codigo}")
-    public @ResponseBody
-    String update(@RequestBody MultipartFile file, @PathVariable ("codigo") String codigo) {
-        return cloudinaryService.uploadPhoto(file,codigo);
+    String update(@RequestBody MultipartFile file, @RequestHeader String idnavision) {
+        return cloudinaryService.uploadPhoto(file,idnavision);
     }
 
 
