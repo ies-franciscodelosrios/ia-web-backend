@@ -1,8 +1,6 @@
 package apirestful.iawebbackend.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -10,54 +8,58 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Configuration
-@EnableSwagger2
-public class SwaggerConfig implements WebMvcConfigurer {
+public class SwaggerConfig {
 
-
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     private ApiKey apiKey(){
-        return new ApiKey("JWT", "Authorization", "header");
+        return new ApiKey("JWT", AUTHORIZATION_HEADER, "header");
     }
+
+
     @Bean
     public Docket api(){
-        return new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo())
                 .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()))
+                .securitySchemes(Arrays.asList(jwtScheme()))
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();
     }
 
-    private SecurityContext securityContext(){
-        return SecurityContext.builder().securityReferences(defaultAuth()).build();
+    public ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("API IA-WEB 2.0")
+                .description(
+                        "API para gestionar la jornada laboral de los trabajadores")
+                .version("1.0")
+                .contact(new Contact("Atmira", "https://atmira.com/", "marketing@atmira.com"))
+                .build();
     }
 
-    private List<SecurityReference> defaultAuth(){
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+
+    private SecurityScheme jwtScheme() {
+        return HttpAuthenticationScheme.JWT_BEARER_BUILDER
+                .name("JWT")
+                .build();
     }
 
-    private ApiInfo apiInfo(){
-        return new ApiInfo(
-                "Spring Boot Blog REST APIs",
-                "Spring Boot Blog REST API Documentation",
-                "1",
-                "Terms of service",
-                new Contact("Ramesh Fadatare", "www.javaguides.net", "ramesh@gmail.com"),
-                "License of API",
-                "API license URL",
-                Collections.emptyList()
-        );
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+                .securityReferences(Arrays.asList(defaultAuth()))
+                .operationSelector(o -> o.requestMappingPattern().matches("/.*"))
+                .build();
+    }
+
+    private SecurityReference defaultAuth() {
+        return SecurityReference.builder()
+                .scopes(new AuthorizationScope[0])
+                .reference("JWT")
+                .build();
     }
 }
