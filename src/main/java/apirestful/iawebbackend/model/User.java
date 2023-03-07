@@ -48,7 +48,7 @@ public class User {
     @Column(name = "Create_date",length = 50)
     private Timestamp Create_date;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_rols",
             joinColumns = @JoinColumn(name = "user_id"),

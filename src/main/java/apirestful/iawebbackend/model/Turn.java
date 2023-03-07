@@ -12,7 +12,7 @@ public class Turn {
     @Id
     @NotNull
     @Column(name = "Codigo")
-    private Long Codigo;
+    private String Codigo;
 
     @Column(name = "Lunes",length = 100)
     private Float Lunes;
@@ -68,7 +68,7 @@ public class Turn {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Turn(Long codigo, Float lunes, String lunesDescripcion, Float martes, String martesDescripcion, Float miercoles, String miercolesDescripcion, Float jueves, String juevesDescripcion, Float viernes, String viernesDescripcion, Float sabado, String sabadoDescripcion, Float domingo, String domingoDescripcion, Float total_Semana, Timestamp semana, User user) {
+    public Turn(String codigo, Float lunes, String lunesDescripcion, Float martes, String martesDescripcion, Float miercoles, String miercolesDescripcion, Float jueves, String juevesDescripcion, Float viernes, String viernesDescripcion, Float sabado, String sabadoDescripcion, Float domingo, String domingoDescripcion, Float total_Semana, Timestamp semana, User user) {
         Codigo = codigo;
         Lunes = lunes;
         LunesDescripcion = lunesDescripcion;
@@ -91,11 +91,11 @@ public class Turn {
 
     public Turn() {}
 
-    public Long getCodigo() {
+    public String getCodigo() {
         return Codigo;
     }
 
-    public void setCodigo(Long codigo) {
+    public void setCodigo(String codigo) {
         Codigo = codigo;
     }
 

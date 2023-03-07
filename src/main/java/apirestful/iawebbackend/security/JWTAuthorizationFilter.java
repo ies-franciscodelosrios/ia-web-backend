@@ -1,5 +1,6 @@
 package apirestful.iawebbackend.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,10 @@ import java.io.IOException;
 
 @Component
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
+
+    @Autowired
+    UserDetailServiceImpl userDetailService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -22,7 +27,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             String token = bearerToken.replace("Bearer ", "");
-            UsernamePasswordAuthenticationToken usernamePAT = TokenUtils.getAuthentication(token);
+            TokenUtils tokenUtils = new TokenUtils(userDetailService);
+            UsernamePasswordAuthenticationToken usernamePAT = tokenUtils.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(usernamePAT);
         }
         filterChain.doFilter(request, response);

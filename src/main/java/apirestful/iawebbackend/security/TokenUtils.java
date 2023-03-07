@@ -6,11 +6,17 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
+
 
 public class TokenUtils {
+
+    static UserDetailServiceImpl userDetailService;
+
+    public TokenUtils(UserDetailServiceImpl userDetailService) {
+        this.userDetailService = userDetailService;
+    }
 
     private final static String ACCESS_TOKEN_SECRET = "IaWebAtmiratest1test2test3test4test5test6test7";
 
@@ -35,10 +41,11 @@ public class TokenUtils {
                     .getBody();
 
             String login = claims.getSubject();
-            return new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
+            return new UsernamePasswordAuthenticationToken(login, null, userDetailService.loadUserByUsername(login).getAuthorities());
 
         } catch (JwtException e) {
             return null;
         }
     }
+
 }
