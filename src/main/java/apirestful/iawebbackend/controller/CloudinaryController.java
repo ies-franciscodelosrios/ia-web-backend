@@ -31,9 +31,9 @@ public class CloudinaryController {
             @ApiResponse(code = 403, message = "No token authorised"),
             @ApiResponse(code = 500, message = "Internal Error ")
     })
-    @PutMapping()
+    @PutMapping("/{idnavision}")
     public @ResponseBody
-    String update(@RequestBody MultipartFile file, @RequestHeader String idnavision) {
+    String update(@RequestBody MultipartFile file, @PathVariable ("idnavision") String idnavision) {
         return cloudinaryService.uploadPhoto(file,idnavision);
     }
 
