@@ -1,7 +1,6 @@
 package apirestful.iawebbackend.controller;
 import apirestful.iawebbackend.exceptions.RecordNotFoundException;
 import apirestful.iawebbackend.model.Event;
-import apirestful.iawebbackend.security.TokenUtils;
 import apirestful.iawebbackend.security.UserDetailServiceImpl;
 import apirestful.iawebbackend.services.EventService;
 import io.swagger.annotations.*;
@@ -20,9 +19,7 @@ import java.util.*;
 public class EventController {
     @Autowired
     private EventService eventService;
-
-    @Autowired
-    private TokenUtils tokenUtils;
+    
     @Autowired
     private UserDetailServiceImpl userDetailService;
 
