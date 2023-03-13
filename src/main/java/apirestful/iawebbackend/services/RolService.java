@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -20,73 +21,205 @@ public class RolService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean assignRolToUser(String userId, Long rolId) {
-        try {
-            User user = userRepository.findById(userId).get();
-            Rol rol = rolRepository.findById(rolId).get();
+    /**
+     * @param userId
+     * @param rolId
+     * @return true if the role could be assigned and false if not
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public boolean assignRolToUser(String userId, Long rolId) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        try{
+            if (!userId.isEmpty() && rolId!=null) {
+                try {
+                    Optional<User> user = userRepository.findById(userId);
+                    Optional<Rol> rol = rolRepository.findById(rolId);
 
-            if (user.getRols().contains(rol)) return false;
+                    if (!user.isPresent()) throw new RecordNotFoundException("User with userId: " + userId + " not found");
+                    if (!rol.isPresent()) throw new RecordNotFoundException("Rol with rolId: " + rolId + " not found");
 
-            for(Rol auxrol : user.getRols()) {
-                if ((auxrol.getId() == 2 && rolId == 3) || (auxrol.getId() == 3 && rolId == 2)) {
-                    return false;
+                    if (user.get().getRols().contains(rol.get())) return false;
+
+                    for(Rol auxrol : user.get().getRols()) {
+                        if ((auxrol.getId() == 2 && rolId == 3) || (auxrol.getId() == 3 && rolId == 2)) {
+                            return false;
+                        }
+                    }
+                    user.get().getRols().add(rol.get());
+                    userRepository.save(user.get());
+                    return true;
+
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(e);
                 }
+            } else {
+                throw new RecordNotFoundException("userId or rolID are empty");
             }
-
-            user.getRols().add(rol);
-            userRepository.save(user);
-            return true;
-        }
-        catch (Exception e) {
-            throw new RecordNotFoundException("No se encuentra el usuario o rol con el código especificado");
+        }catch (NullPointerException e){
+            throw new NullPointerException("Null value");
         }
     }
 
-    public boolean denyRolToUser(String userId, Long rolId) {
-        User user = userRepository.findById(userId).get();
-        Rol rol = rolRepository.findById(rolId).get();
-        if (user.getRols().contains(rol)) {
-            user.getRols().remove(rol);
-            userRepository.save(user);
-            return true;
+    /**
+     * @param userId
+     * @param rolId
+     * @return true if the role could be denied and false if not
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public boolean denyRolToUser(String userId, Long rolId) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        try{
+            if (!userId.isEmpty() && rolId!=null) {
+                try {
+                    Optional<User> user = userRepository.findById(userId);
+                    Optional<Rol> rol = rolRepository.findById(rolId);
+
+                    if (!user.isPresent()) throw new RecordNotFoundException("User with userId: " + userId + " not found");
+                    if (!rol.isPresent()) throw new RecordNotFoundException("Rol with rolId: " + rolId + " not found");
+
+                    if (user.get().getRols().contains(rol.get())) {
+                        user.get().getRols().remove(rol.get());
+                        userRepository.save(user.get());
+                        return true;
+                    }
+                    return false;
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            } else {
+                throw new RecordNotFoundException("userId or rolID are empty");
+            }
+        }catch (NullPointerException e){
+            throw new NullPointerException("Null value");
         }
-        return false;
     }
 
-    public boolean isAdmin(String userId) {
-        User user = userRepository.findById(userId).get();
-        Rol AdminRol = rolRepository.findById(1L).get();
-        for(Rol rol : user.getRols()) {
-            if (rol.equals(AdminRol)) return true;
+    /**
+     * @param userId
+     * @return true if the user is admin and false if it is not
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public boolean isAdmin(String userId) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        try{
+            if (!userId.isEmpty()) {
+                try {
+                    Optional<User> user = userRepository.findById(userId);
+                    if (user.isPresent()) {
+                        Rol AdminRol = rolRepository.findById(1L).get();
+                        for(Rol rol : user.get().getRols()) {
+                            if (rol.equals(AdminRol)) return true;
+                        }
+                        return false;
+                    } else {
+                        throw new RecordNotFoundException("User with userId: " + userId + " not found");
+                    }
+
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            } else {
+                throw new RecordNotFoundException("userId is empty");
+            }
+        }catch (NullPointerException e){
+            throw new NullPointerException("Null value");
         }
-        return false;
     }
 
-    public boolean isEvaluador(String userId) {
-        User user = userRepository.findById(userId).get();
-        Rol EvaluadorRol = rolRepository.findById(3L).get();
-        for(Rol rol : user.getRols()) {
-            if (rol.equals(EvaluadorRol)) return true;
+    /**
+     * @param userId
+     * @return true if the user is evaluador and false if it is not
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public boolean isEvaluador(String userId) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        try{
+            if (!userId.isEmpty()) {
+                try {
+                    Optional<User> user = userRepository.findById(userId);
+                    if (user.isPresent()) {
+                        Rol EvaluadorRol = rolRepository.findById(3L).get();
+                        for (Rol rol : user.get().getRols()) {
+                            if (rol.equals(EvaluadorRol)) return true;
+                        }
+                        return false;
+                    } else {
+                        throw new RecordNotFoundException("User with userId: " + userId + " not found");
+                    }
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            } else {
+                throw new RecordNotFoundException("userId is empty");
+            }
+        }catch (NullPointerException e){
+            throw new NullPointerException("Null value");
         }
-        return false;
     }
 
-    public boolean isSocio(String userId) {
-        User user = userRepository.findById(userId).get();
-        Rol SocioRol = rolRepository.findById(2L).get();
-        for(Rol rol : user.getRols()) {
-            if (rol.equals(SocioRol)) return true;
+    /**
+     * @param userId
+     * @return true if the user is socio and false if it is not
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public boolean isSocio(String userId) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        try{
+            if (!userId.isEmpty()) {
+                try {
+                    Optional<User> user = userRepository.findById(userId);
+                    if (user.isPresent()) {
+                        Rol SocioRol = rolRepository.findById(2L).get();
+                        for (Rol rol : user.get().getRols()) {
+                            if (rol.equals(SocioRol)) return true;
+                        }
+                        return false;
+                    }
+                    else {
+                        throw new RecordNotFoundException("User with userId: " + userId + " not found");
+                    }
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            } else {
+                throw new RecordNotFoundException("userId is empty");
+            }
+        }catch (NullPointerException e){
+            throw new NullPointerException("Null value");
         }
-        return false;
     }
 
-    public List<User> getUsersOfOneRol(Long rolId) {
-        List<User> users = new ArrayList<>();
-        List<String> usersId = rolRepository.userByRol(rolId);
-        for(String userId : usersId) {
-            users.add(userRepository.findById(userId).get());
+    /**
+     * @param rolId
+     * @return list of users who have this role
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public List<User> getUsersOfOneRol(Long rolId) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        try{
+            if (!rolId.toString().isEmpty()) {
+                try {
+                    List<User> users = new ArrayList<>();
+                    List<String> usersId = rolRepository.userByRol(rolId);
+                    for(String userId : usersId) {
+                        users.add(userRepository.findById(userId).get());
+                    }
+                    return users;
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            } else {
+                throw new RecordNotFoundException("rolId is empty");
+            }
+        }catch (NullPointerException e){
+            throw new NullPointerException("Null value");
         }
-        return users;
     }
 
 }
