@@ -33,7 +33,7 @@ public class CloudinaryController {
     })
     @PutMapping("/{idnavision}")
     public @ResponseBody
-    String update(@RequestBody MultipartFile file, @PathVariable ("idnavision") String idnavision) {
+    String update(@RequestBody MultipartFile file, @PathVariable String idnavision) {
         return cloudinaryService.uploadPhoto(file,idnavision);
     }
 
