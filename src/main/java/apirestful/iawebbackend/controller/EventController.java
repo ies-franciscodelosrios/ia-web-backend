@@ -19,7 +19,7 @@ import java.util.*;
 public class EventController {
     @Autowired
     private EventService eventService;
-    
+
     @Autowired
     private UserDetailServiceImpl userDetailService;
 
