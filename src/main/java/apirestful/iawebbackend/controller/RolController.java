@@ -41,8 +41,8 @@ public class RolController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("assignRolToUser")
-    public ResponseEntity<Boolean> assignRolToUser(@RequestHeader String userId, @RequestHeader Long rolId) {
+    @PostMapping("assignRolToUser/{userId}/{rolId}")
+    public ResponseEntity<Boolean> assignRolToUser(@PathVariable String userId, @PathVariable Long rolId) {
         try {
             if (!userId.isEmpty()) {
                 try {
