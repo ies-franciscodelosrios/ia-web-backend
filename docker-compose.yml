@@ -1,21 +1,69 @@
-version: '3'
+version: "3"
 
 services:
+
   docker-mysql:
     image: mysql:5.7
+    network_mode: bridge
+    container_name: docker-mysql
+    networks:
+      - backend
+    volumes:
+      - ./datasql:/var/lib/mysql
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=test
+    expose:
+      - 3306
     ports:
       - 3306:3306
-    volumes:
-      # DOCKER VOLUME
-      - "./basedatos:/var/lib/mysql"
-  app:
-    image: app:latest
-    ports:
-       - 8080:8080
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://docker-mysql:3306/test?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    restart: always
+    
+  api:
     depends_on:
-       - docker-mysql
+      - docker-mysql
+    links:
+      - docker-mysql
+    image: app:latest
+    network_mode: bridge
+    networks:
+      - backend
+      - frontend
+    container_name: api
+    environment:
+      - MYSQL_HOST=docker-mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_PORT=3306
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    restart: always
+    
+  angular:
+    image: nginx:alpine
+    networks:
+      - frontend
+    container_name: angular
+    ports: 
+      - 4200:80
+    depends_on:
+      - api
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./dist/ia/:/usr/share/nginx/html
+      
+  phpmyadmin:
+    container_name: dbadmin
+    image: phpmyadmin
+    ports:
+      - 80:80
+    environment:
+      - PMA_ARBITRARY=1
+    restart: always
+networks:
+  frontend:
+  backend:
+    external: true
