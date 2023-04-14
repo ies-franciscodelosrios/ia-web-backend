@@ -1,7 +1,6 @@
 package apirestful.iawebbackend.services;
 import apirestful.iawebbackend.model.PollsAssignment;
-import atmira.demo.repository.PollsAssignmentRepository;
-import atmira.demo.repository.QuestionaryGroupRepository;
+import apirestful.iawebbackend.repository.PollsAssignmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,5 +12,9 @@ public class PollsAssignmentService {
     @Autowired
     PollsAssignmentRepository pollsAssignmentRepository;
 
+    public List<PollsAssignment> getAllPA() {
+        List<PollsAssignment>  PollsAssignment =  pollsAssignmentRepository.findAll();
+        return  PollsAssignment;
+    }
 
 }

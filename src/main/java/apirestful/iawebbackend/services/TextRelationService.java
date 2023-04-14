@@ -1,5 +1,4 @@
 package apirestful.iawebbackend.services;
-import atmira.demo.repository.TextRelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
