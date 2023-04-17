@@ -1,4 +1,5 @@
 package apirestful.iawebbackend.services;
+import apirestful.iawebbackend.exceptions.RecordNotFoundException;
 import apirestful.iawebbackend.model.QuestionaryGroup;
 import apirestful.iawebbackend.repository.QuestionaryGroupRepository;
 
@@ -16,6 +17,59 @@ public class QuestionaryGroupService {
     public List<QuestionaryGroup> getOrderItemsByOrderId() {
         List<QuestionaryGroup> order = questionaryGroupRepository.findAll();
         return order;
+    }
+
+
+    /**
+     * @param questionaryGroup
+     * @return Create a QuestionaryGroup
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public QuestionaryGroup createQuestionaryGroup(QuestionaryGroup questionaryGroup) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        try {
+            QuestionaryGroup idGET = questionaryGroupRepository.getQuestionaryGroupbyID(questionaryGroup.getId());
+            if(idGET == null){
+                try {
+                    QuestionaryGroup modelObject;
+                    modelObject= questionaryGroupRepository.save(questionaryGroup);
+                    return modelObject;
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }else{
+                throw new RecordNotFoundException("The questionaryGroup have already exist");
+            }
+        }catch (NullPointerException e){
+            throw new NullPointerException("Null value"+ e);
+        }
+    }
+
+    /**
+     * @param questionaryGroup
+     * @return Create a QuestionaryGroup
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public QuestionaryGroup getQuestionaryGroupbyID(QuestionaryGroup questionaryGroup) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        try {
+            QuestionaryGroup idGET = questionaryGroupRepository.getQuestionaryGroupbyID(questionaryGroup.getId());
+            if(idGET == null){
+                try {
+                    QuestionaryGroup modelObject;
+                    modelObject= questionaryGroupRepository.save(questionaryGroup);
+                    return modelObject;
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }else{
+                throw new RecordNotFoundException("The questionaryGroup have already exist");
+            }
+        }catch (NullPointerException e){
+            throw new NullPointerException("Null value"+ e);
+        }
     }
 
 }

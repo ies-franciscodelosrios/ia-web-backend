@@ -1,5 +1,7 @@
 package apirestful.iawebbackend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.validation.constraints.NotNull;
 import javax.persistence.*;
@@ -37,6 +39,7 @@ public class QuestionaryGroup {
 
     @JsonIgnore
     @OneToMany(mappedBy = "questionaryGroup")
+    @LazyCollection(LazyCollectionOption.EXTRA)
     private List<PollsAssignment> pollsAssignments;
 
 
