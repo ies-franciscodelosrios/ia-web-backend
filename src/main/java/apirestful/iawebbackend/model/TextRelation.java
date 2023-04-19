@@ -1,7 +1,12 @@
 package apirestful.iawebbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 @Entity
@@ -16,7 +21,7 @@ public class TextRelation {
     private Long RelationId;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "question_id")
     private Question question;
 
@@ -30,9 +35,9 @@ public class TextRelation {
     public TextRelation() {
     }
 
-    public TextRelation(Long relationId,Question question, QuestionaryGroup questionaryGroup, Response response) {
+    public TextRelation(Long relationId, Question questions, QuestionaryGroup questionaryGroup, Response response) {
         RelationId = relationId;
-        this.question = question;
+        this.question = questions;
         this.questionaryGroup = questionaryGroup;
         this.response = response;
     }
