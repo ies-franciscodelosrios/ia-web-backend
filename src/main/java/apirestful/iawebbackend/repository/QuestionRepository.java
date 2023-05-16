@@ -15,4 +15,7 @@ public interface QuestionRepository extends JpaRepository<Question,Long> {
 
     @Query(value = "SELECT q.id,q.text,q.type FROM question as q WHERE q.id=?",nativeQuery = true)
     Question getQuestionbyID(Long ID);
+
+    @Query(value = "SELECT q.id,q.text,q.type FROM text_relation AS tr JOIN question as q ON tr.question_id=q.id JOIN questionary_group as qg ON qg.id=tr.questionary_group_id WHERE tr.questionary_group_id=? GROUP BY (tr.question_id)",nativeQuery = true)
+    List<Question> getAllQuestionsBySurvey(Long ID);
 }

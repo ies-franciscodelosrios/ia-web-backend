@@ -1,6 +1,7 @@
 package apirestful.iawebbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -21,15 +22,19 @@ public class TextRelation {
     private Long RelationId;
 
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "question_id")
     private Question question;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "questionary_group_id")
     private QuestionaryGroup questionaryGroup;
 
-    @OneToOne(mappedBy = "textRelation", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
+    @OneToOne(mappedBy = "textRelation", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Response response;
 
     public TextRelation() {
@@ -41,6 +46,8 @@ public class TextRelation {
         this.questionaryGroup = questionaryGroup;
         this.response = response;
     }
+
+
 
     public Long getRelationId() {
         return RelationId;
@@ -66,9 +73,11 @@ public class TextRelation {
         this.questionaryGroup = questionaryGroup;
     }
 
+
     public Response getResponse() {
         return response;
     }
+
 
     public void setResponse(Response response) {
         this.response = response;
@@ -79,7 +88,6 @@ public class TextRelation {
         return "TextRelation{" +
                 "RelationId=" + RelationId +
                 ", question=" + question +
-                ", response=" + response +
                 '}';
     }
 }

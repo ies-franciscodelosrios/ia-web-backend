@@ -20,14 +20,14 @@ public class QuestionaryGroupController {
     @Autowired
     private QuestionaryGroupService questionaryGroupService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<QuestionaryGroup>> getQG() throws ResponseStatusException {
+    @GetMapping("/id")
+    public ResponseEntity<QuestionaryGroup> getQG(@RequestHeader Long id) throws ResponseStatusException {
         try {
-            List<QuestionaryGroup> all = questionaryGroupService.getOrderItemsByOrderId();
+            QuestionaryGroup all = questionaryGroupService.getQuestionaryGroupsById(id);
             System.out.println(all);
-            return new ResponseEntity<List<QuestionaryGroup>>(all, new HttpHeaders(), HttpStatus.OK);
+            return new ResponseEntity<QuestionaryGroup>(all, new HttpHeaders(), HttpStatus.OK);
         } catch (ResponseStatusException e) {
-            List<QuestionaryGroup> all = questionaryGroupService.getOrderItemsByOrderId();
+            QuestionaryGroup all = questionaryGroupService.getQuestionaryGroupsById(id);
             return new ResponseEntity<>(all, new HttpHeaders(), HttpStatus.OK);
         }
     }

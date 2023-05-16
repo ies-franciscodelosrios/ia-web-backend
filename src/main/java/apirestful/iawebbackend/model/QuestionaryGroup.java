@@ -1,5 +1,6 @@
 package apirestful.iawebbackend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -43,14 +44,17 @@ public class QuestionaryGroup {
     private List<PollsAssignment> pollsAssignments;
 
 
+
     @JsonIgnore
-    @OneToOne(mappedBy = "questionaryGroup", cascade = CascadeType.ALL)
-    private TextRelation textRelation;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToMany(mappedBy = "questionaryGroup")
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private List<TextRelation> textRelation;
 
     public QuestionaryGroup() {
     }
 
-    public QuestionaryGroup(Long id, Date startDate, Date endDate, boolean active, String name,TextRelation textRelation,
+    public QuestionaryGroup(Long id, Date startDate, Date endDate, boolean active, String name,List<TextRelation> textRelation,
                             String description, int personCategory,
                             List<PollsAssignment> pollsAssignments) {
         Id = id;
@@ -131,15 +135,13 @@ public class QuestionaryGroup {
     }
 
 
-    public TextRelation getTextRelation() {
+    public List<TextRelation> getTextRelation() {
         return textRelation;
     }
 
-    public void setTextRelation(TextRelation textRelation) {
+    public void setTextRelation(List<TextRelation> textRelation) {
         this.textRelation = textRelation;
     }
-
-
 
     @Override
     public String toString() {

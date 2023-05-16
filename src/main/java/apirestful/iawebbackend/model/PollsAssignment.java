@@ -40,6 +40,9 @@ public class PollsAssignment {
     @OneToOne(mappedBy = "pollsAssignment", cascade = CascadeType.ALL)
     private Poll poll;
 
+    @OneToOne(mappedBy = "pollsAssignment", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Response response;
+
 
     @Column(name = "Active")
     private boolean Active;
