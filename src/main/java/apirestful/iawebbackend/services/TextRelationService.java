@@ -18,10 +18,10 @@ import java.util.Map;
 public class TextRelationService {
 
 
-    private TextRelationRepository textRelationRepository;
-    private QuestionaryGroupRepository questionaryGroupRepository;
-    private QuestionRepository questionRepository;
-    private QuestionaryGroupService questionaryGroupService;
+    private final TextRelationRepository textRelationRepository;
+    public final QuestionaryGroupRepository questionaryGroupRepository;
+    private final QuestionRepository questionRepository;
+    public QuestionaryGroupService questionaryGroupService;
 
     @Autowired
     public TextRelationService(final TextRelationRepository textRelationRepository,
@@ -35,9 +35,16 @@ public class TextRelationService {
     }
 
 
+    /*
+        Get all Text-Relation
+     */
     public List<TextRelation> getAlltr() {
-        List<TextRelation> order = textRelationRepository.findAll();
-        return order;
+        List<TextRelation> textRelations = textRelationRepository.findAll();
+        if(textRelations!=null){
+            return textRelations;
+        }else{
+            throw new RecordNotFoundException("Not Found Records");
+        }
     }
 
 
@@ -48,22 +55,18 @@ public class TextRelationService {
      * @throws NullPointerException
      * @throws IllegalArgumentException
      */
-    public TextRelation createTR(TextRelation textRelation) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+    public TextRelation createTR(TextRelation textRelation) throws RecordNotFoundException, NullPointerException {
         try {
             TextRelation idGET = textRelationRepository.getTRbyID(textRelation.getRelationId());
-            if(idGET == null){
-                try {
+            if(idGET==null){
                     TextRelation modelObject;
                     modelObject= textRelationRepository.save(textRelation);
                     return modelObject;
-                } catch (IllegalArgumentException e) {
-                    throw new IllegalArgumentException(e);
-                }
-            }else{
+            } else {
                 throw new RecordNotFoundException("The Response have already exist");
             }
-        }catch (NullPointerException e){
-            throw new NullPointerException("Null value"+ e);
+            }catch (NullPointerException e) {
+            throw new NullPointerException("Null value" + e);
         }
     }
 
@@ -74,14 +77,18 @@ public class TextRelationService {
      * @throws NullPointerException
      * @throws IllegalArgumentException
      */
-    public List<Question> getAllQuestionsBySurvey(Long questionary_group_id) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
-        try {
+    public List<Question> getAllQuestionsBySurvey(Long questionary_group_id) throws RecordNotFoundException, NullPointerException {
+        if(questionary_group_id!=null){
             List<Question> modelObject;
             modelObject= questionRepository.getAllQuestionsBySurvey(questionary_group_id);
-            System.out.println(modelObject);
-            return modelObject;
-        }catch (NullPointerException e){
-            throw new NullPointerException("Null value"+ e);
+            if(modelObject!=null){
+                return modelObject;
+            }else{
+                throw new RecordNotFoundException("Not Found Questions for this Survey");
+            }
+
+        }else{
+            throw new NullPointerException("Null value");
         }
     }
 
@@ -94,13 +101,17 @@ public class TextRelationService {
      * @throws IllegalArgumentException
      */
     public List<Map<Question,Response>> getAllResponsesByUserSurvey(Long questionary_group_id,String id_navision) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
-        try {
+        if(questionary_group_id!=null && !id_navision.isEmpty()){
             List<Map<Question,Response>> modelObject;
             modelObject= textRelationRepository.getResponsebyQGbyUser(questionary_group_id,id_navision);
-            System.out.println(modelObject);
-            return modelObject;
-        }catch (NullPointerException e){
-            throw new NullPointerException("Null value"+ e);
+            if(modelObject!=null){
+                System.out.println(modelObject);
+                return modelObject;
+            }else {
+                throw new RecordNotFoundException("No responses found in this Survey");
+            }
+        }else {
+            throw new NullPointerException("Null value");
         }
     }
 }

@@ -26,6 +26,16 @@ public class TextRelationController {
 
     @Autowired
     private TextRelationService textRelationService;
+
+
+    @ApiOperation(value = "Get All Text Relations", notes = "Return a list of all Text Relation")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
     @GetMapping("/all")
     public ResponseEntity<List<TextRelation>> getQG() throws ResponseStatusException {
         try {
@@ -38,6 +48,14 @@ public class TextRelationController {
         }
     }
 
+    @ApiOperation(value = "Get all Questions of a one Survey", notes = "Return a list of all questions of one Survey")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
     @GetMapping("/all/questions")
     public ResponseEntity<List<Question>> getAllQuestionsBySurvey(@RequestHeader Long id_qg) throws ResponseStatusException {
 
@@ -51,10 +69,14 @@ public class TextRelationController {
         }
     }
 
-    public class ResponseQuestion {
-        Response value1;
-        Question value2;
-    }
+    @ApiOperation(value = "Get all Response of a one Survey by one User", notes = "Return a list of all responses of one Survey by one User")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
     @GetMapping("/all/questions/user")
     public ResponseEntity<List<Map<Question,Response>>> getAllResponsesByUserQG(@RequestHeader Long id_qg, @RequestHeader String id_navision) throws ResponseStatusException {
 
@@ -68,11 +90,13 @@ public class TextRelationController {
         }
     }
 
+
+
     /**
      * @param textRelation
      * @return Create a question with a data
      */
-    @ApiOperation(value = "Create a question with a data", notes = "Return a question with a data")
+    @ApiOperation(value = "Create a Text-Relation with a data", notes = "Return a text-relation with a data")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully petition"),
             @ApiResponse(code = 404, message = "Not found"),
