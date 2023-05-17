@@ -219,7 +219,6 @@ public class User {
                 ", Create_date=" + Create_date +
                 ", rols=" + rols +
                 ", events=" + events +
-                ", turns=" + turns +
                 '}';
     }
 }
