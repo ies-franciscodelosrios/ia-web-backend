@@ -41,7 +41,7 @@ public class Poll {
 
 
 
-
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "polls_assignment_id")
     private PollsAssignment pollsAssignment;
