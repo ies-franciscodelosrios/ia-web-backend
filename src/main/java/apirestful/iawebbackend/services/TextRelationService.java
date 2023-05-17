@@ -55,12 +55,14 @@ public class TextRelationService {
      * @throws NullPointerException
      * @throws IllegalArgumentException
      */
-    public TextRelation createTR(TextRelation textRelation) throws RecordNotFoundException, NullPointerException {
+    public TextRelation createTR(TextRelation textRelation, String id_questionary_group) throws RecordNotFoundException, NullPointerException {
         try {
             TextRelation idGET = textRelationRepository.getTRbyID(textRelation.getRelationId());
+            QuestionaryGroup questionaryGroup= questionaryGroupService.getQuestionaryGroupbyID(id_questionary_group);
             if(idGET==null){
-                    TextRelation modelObject;
-                    modelObject= textRelationRepository.save(textRelation);
+                    TextRelation modelObject= textRelation;
+                    modelObject.setQuestionaryGroup(questionaryGroup);
+                    modelObject= textRelationRepository.save(modelObject);
                     return modelObject;
             } else {
                 throw new RecordNotFoundException("The Response have already exist");

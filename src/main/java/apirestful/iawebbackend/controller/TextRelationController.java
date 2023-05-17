@@ -105,11 +105,11 @@ public class TextRelationController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @PostMapping
-    public ResponseEntity<?> createTR(@RequestBody TextRelation textRelation) {
+    public ResponseEntity<?> createTR(@RequestBody TextRelation textRelation, @RequestHeader String id) {
         try {
             if (textRelation != null) {
                 try {
-                    TextRelation QGCreate = textRelationService.createTR(textRelation);
+                    TextRelation QGCreate = textRelationService.createTR(textRelation,id);
                     return new ResponseEntity<TextRelation>(QGCreate, new HttpHeaders(), HttpStatus.OK);
                 } catch (ResponseStatusException e) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data");
