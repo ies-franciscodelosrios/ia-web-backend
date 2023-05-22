@@ -115,7 +115,7 @@ public class RolService {
                         }
                         return false;
                     } else {
-                        throw new RecordNotFoundException("User with userId: " + userId + " not found");
+                        throw new RecordNotFoundException("User with userId: " + userId + " is not Admin");
                     }
 
                 } catch (IllegalArgumentException e) {
@@ -148,7 +148,7 @@ public class RolService {
                         }
                         return false;
                     } else {
-                        throw new RecordNotFoundException("User with userId: " + userId + " not found");
+                        throw new RecordNotFoundException("User with userId: " + userId + " is not Evaluator ");
                     }
                 } catch (IllegalArgumentException e) {
                     throw new IllegalArgumentException(e);
@@ -181,7 +181,7 @@ public class RolService {
                         return false;
                     }
                     else {
-                        throw new RecordNotFoundException("User with userId: " + userId + " not found");
+                        throw new RecordNotFoundException("User with userId: " + userId + " is not Socio");
                     }
                 } catch (IllegalArgumentException e) {
                     throw new IllegalArgumentException(e);
@@ -219,6 +219,23 @@ public class RolService {
             }
         }catch (NullPointerException e){
             throw new NullPointerException("Null value");
+        }
+    }
+
+    /**
+     * @return a list of rols
+     * @throws RecordNotFoundException
+     */
+    public List<Rol> getAllRols() throws RecordNotFoundException, NullPointerException {
+        try {
+            List<Rol> result = rolRepository.findAll();
+            if (!result.isEmpty()) {
+                return result;
+            } else {
+                throw new RecordNotFoundException("Dont have rols");
+            }
+        }catch (NullPointerException e){
+            throw new NullPointerException(e.getMessage());
         }
     }
 
