@@ -12,12 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestController
 @Api(tags = "User")
@@ -44,8 +39,7 @@ public class UserController {
             List<User> all = userService.getAllUsers();
             return new ResponseEntity<List<User>>(all, new HttpHeaders(), HttpStatus.OK);
         } catch (ResponseStatusException e) {
-            List<User> all = userService.getAllUsers();
-            return new ResponseEntity<>(all, new HttpHeaders(), HttpStatus.OK);
+            throw new ResponseStatusException(e.getStatus(), e.getReason(), e);
         }
     }
 
