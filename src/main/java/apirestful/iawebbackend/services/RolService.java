@@ -107,10 +107,10 @@ public class RolService {
         try{
             if (!userId.isEmpty()) {
                 try {
-                    Optional<User> user = userRepository.findById(userId);
-                    if (user.isPresent()) {
+                    User user = userRepository.getByIdNavision(userId);
+                    if (user != null) {
                         Rol AdminRol = rolRepository.findById(1L).get();
-                        for(Rol rol : user.get().getRols()) {
+                        for(Rol rol : user.getRols()) {
                             if (rol.equals(AdminRol)) return true;
                         }
                         return false;

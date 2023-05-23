@@ -105,11 +105,31 @@ public class TextRelationController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @PostMapping
-    public ResponseEntity<?> createTR(@RequestBody TextRelation textRelation, @RequestHeader String id) {
+    public ResponseEntity<?> createTR(@RequestBody TextRelation textRelation, @RequestHeader String id_qg, @RequestHeader String q) {
         try {
             if (textRelation != null) {
                 try {
-                    TextRelation QGCreate = textRelationService.createTR(textRelation,id);
+                    TextRelation QGCreate = textRelationService.createTR(textRelation,id_qg,q);
+                    return new ResponseEntity<TextRelation>(QGCreate, new HttpHeaders(), HttpStatus.OK);
+                } catch (ResponseStatusException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data");
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The response has not found");
+            }
+        }catch (ResponseStatusException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission",e);
+        }
+
+    }
+
+
+    @GetMapping("/alling")
+    public ResponseEntity<?> gettrbyid(@RequestHeader String id_qg) {
+        try {
+            if (id_qg != null) {
+                try {
+                    TextRelation QGCreate = textRelationService.getTRbyID(id_qg);
                     return new ResponseEntity<TextRelation>(QGCreate, new HttpHeaders(), HttpStatus.OK);
                 } catch (ResponseStatusException e) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data");

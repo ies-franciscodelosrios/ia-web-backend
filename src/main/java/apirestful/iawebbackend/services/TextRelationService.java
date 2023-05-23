@@ -1,12 +1,8 @@
 package apirestful.iawebbackend.services;
 import apirestful.iawebbackend.exceptions.RecordNotFoundException;
-import apirestful.iawebbackend.model.Question;
-import apirestful.iawebbackend.model.QuestionaryGroup;
-import apirestful.iawebbackend.model.Response;
-import apirestful.iawebbackend.model.TextRelation;
+import apirestful.iawebbackend.model.*;
 import apirestful.iawebbackend.repository.QuestionRepository;
 import apirestful.iawebbackend.repository.QuestionaryGroupRepository;
-import apirestful.iawebbackend.repository.ResponseRepository;
 import apirestful.iawebbackend.repository.TextRelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,16 +17,19 @@ public class TextRelationService {
     private final TextRelationRepository textRelationRepository;
     public final QuestionaryGroupRepository questionaryGroupRepository;
     private final QuestionRepository questionRepository;
+
+    private final QuestionService questionService;
     public QuestionaryGroupService questionaryGroupService;
 
     @Autowired
     public TextRelationService(final TextRelationRepository textRelationRepository,
                                final QuestionaryGroupRepository questionaryGroupRepository,
                                final QuestionRepository questionRepository,
-                               final QuestionaryGroupService questionaryGroupService) {
+                               QuestionService questionService, final QuestionaryGroupService questionaryGroupService) {
         this.textRelationRepository = textRelationRepository;
         this.questionaryGroupRepository = questionaryGroupRepository;
         this.questionRepository = questionRepository;
+        this.questionService = questionService;
         this.questionaryGroupService = questionaryGroupService;
     }
 
@@ -55,13 +54,16 @@ public class TextRelationService {
      * @throws NullPointerException
      * @throws IllegalArgumentException
      */
-    public TextRelation createTR(TextRelation textRelation, String id_questionary_group) throws RecordNotFoundException, NullPointerException {
+    public TextRelation createTR(TextRelation textRelation, String id_questionary_group, String id_question) throws RecordNotFoundException, NullPointerException {
         try {
             TextRelation idGET = textRelationRepository.getTRbyID(textRelation.getRelationId());
             QuestionaryGroup questionaryGroup= questionaryGroupService.getQuestionaryGroupbyID(id_questionary_group);
+            Question question = questionService.getQuestionByID(id_question);
+
             if(idGET==null){
                     TextRelation modelObject= textRelation;
                     modelObject.setQuestionaryGroup(questionaryGroup);
+                    modelObject.setQuestion(question);
                     modelObject= textRelationRepository.save(modelObject);
                     return modelObject;
             } else {
@@ -114,6 +116,27 @@ public class TextRelationService {
             }
         }else {
             throw new NullPointerException("Null value");
+        }
+    }
+
+    /**
+     * @param textRelation
+     * @return Create a Response
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public TextRelation getTRbyID( String id_tr) throws RecordNotFoundException, NullPointerException {
+        try {
+            TextRelation idGET = textRelationRepository.getTRbyID(Long.valueOf(id_tr));
+            if(idGET!=null){
+                TextRelation modelObject= idGET;
+                return modelObject;
+            } else {
+                throw new RecordNotFoundException("The Response have not exist");
+            }
+        }catch (NullPointerException e) {
+            throw new NullPointerException("Null value" + e);
         }
     }
 }

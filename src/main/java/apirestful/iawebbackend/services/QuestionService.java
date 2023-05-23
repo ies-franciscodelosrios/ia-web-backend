@@ -103,5 +103,30 @@ public class QuestionService {
     }
 
 
+    /**
+     * @return a user deleted by IdNavision
+     * @param id
+     * @throws RecordNotFoundException
+     * @throws NullPointerException
+     * @throws IllegalArgumentException
+     */
+    public Question getQuestionByID(String id) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        if (id != null && !id.isEmpty()) {
+            try {
+                Question question = questionRepository.getQuestionbyID(Long.valueOf(id));
+                if(question!=null){
+                    return question;
+                }else{
+                    throw new RecordNotFoundException("The question with id: " + id + " dont exist");
+                }
+            } catch (Exception e) {
+                throw new IllegalArgumentException(e);
+            }
+        } else {
+            throw new NullPointerException("Null value");
+        }
+    }
+
+
 
 }
