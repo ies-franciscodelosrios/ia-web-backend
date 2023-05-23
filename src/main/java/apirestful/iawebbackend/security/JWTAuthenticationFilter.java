@@ -1,5 +1,6 @@
 package apirestful.iawebbackend.security;
 
+import apirestful.iawebbackend.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,7 +43,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication authResult) throws IOException, ServletException {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
-        String token = TokenUtils.createToken(userDetails.getName(), userDetails.getUsername());
+        User user = ((UserDetailsImpl) userDetails).getUser();
+        String token = TokenUtils.createToken(user.getLogin(), userDetails.getUsername());
 
         response.addHeader("Authorization", "Bearer " + token);
         response.getWriter().flush();

@@ -10,11 +10,8 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-
-    //Consulta para buscar a los ninos por el nombre (filtro de busqueda)
-    @Query(value = "SELECT * FROM USER WHERE login LIKE ?",nativeQuery = true)
-    User getByIdNavision(String user_name);
-
+    @Query(value = "SELECT * FROM user u WHERE u.login LIKE :login", nativeQuery = true)
+    User getByIdNavision(@Param("login") String login);
 
     @Query(value = "SELECT * FROM USER AS a WHERE a.codigo LIKE ?",nativeQuery = true)
     User getByCodigo(String codigo);

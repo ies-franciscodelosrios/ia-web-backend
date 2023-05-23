@@ -1,7 +1,10 @@
 package apirestful.iawebbackend.security;
 
 import apirestful.iawebbackend.model.User;
+import apirestful.iawebbackend.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,9 +12,15 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-@AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
-    private final User user;
+    private User user;
+    public UserDetailsImpl(User user) {
+        this.user = user;
+    }
+    public User getUser() {
+        return user;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
