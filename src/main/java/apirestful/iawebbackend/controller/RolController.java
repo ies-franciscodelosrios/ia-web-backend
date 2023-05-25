@@ -73,8 +73,8 @@ public class RolController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("denyRolToUser")
-    public ResponseEntity<Boolean> denyRolToUser(@RequestHeader String userId, @RequestHeader Long rolId) {
+    @DeleteMapping("denyRolToUser/{userId}/{rolId}")
+    public ResponseEntity<Boolean> denyRolToUser(@PathVariable String userId, @PathVariable Long rolId) {
         try {
             if (!userId.isEmpty()) {
                 try {
