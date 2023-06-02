@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.validation.constraints.NotNull;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "PollsAssignment")
@@ -40,8 +41,8 @@ public class PollsAssignment {
     @OneToOne(mappedBy = "pollsAssignment", cascade = CascadeType.ALL)
     private Poll poll;
 
-    @OneToOne(mappedBy = "pollsAssignment", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private Response response;
+    @OneToMany(mappedBy = "pollsAssignment", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Response> response;
 
 
     @Column(name = "Active")

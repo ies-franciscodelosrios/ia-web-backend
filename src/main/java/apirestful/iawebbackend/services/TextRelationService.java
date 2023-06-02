@@ -7,6 +7,7 @@ import apirestful.iawebbackend.repository.TextRelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -104,20 +105,26 @@ public class TextRelationService {
      * @throws NullPointerException
      * @throws IllegalArgumentException
      */
-    public List<Map<Question,Response>> getAllResponsesByUserSurvey(Long questionary_group_id,String id_navision) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
-        if(questionary_group_id!=null && !id_navision.isEmpty()){
-            List<Map<Question,Response>> modelObject;
-            modelObject= textRelationRepository.getResponsebyQGbyUser(questionary_group_id,id_navision);
-            if(modelObject!=null){
-                System.out.println(modelObject);
+    public List<Map<Question, Response>> getAllResponsesByUserSurvey(String questionary_group_id, String polls_assignment_id) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        if (questionary_group_id != null && !polls_assignment_id.isEmpty()) {
+            List<Map<Question, Response>> modelObject = null;
+            try {
+                modelObject = textRelationRepository.getResponsebyQGbyUser(questionary_group_id, polls_assignment_id);
+
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+            if (modelObject != null) {
                 return modelObject;
-            }else {
+            } else {
                 throw new RecordNotFoundException("No responses found in this Survey");
             }
-        }else {
+        } else {
             throw new NullPointerException("Null value");
         }
     }
+
 
     /**
      * @param textRelation

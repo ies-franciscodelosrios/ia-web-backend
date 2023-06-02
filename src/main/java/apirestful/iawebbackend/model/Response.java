@@ -30,7 +30,7 @@ public class Response {
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pollsAssignment_id")
     private PollsAssignment pollsAssignment;
 

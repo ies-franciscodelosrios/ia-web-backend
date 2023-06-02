@@ -35,6 +35,17 @@ public class Question {
     @LazyCollection(LazyCollectionOption.EXTRA)
     private List<TextRelation> textRelation;
 
+    @Transient
+    private Response res;
+
+    public Response getRes() {
+        return res;
+    }
+
+    public void setRes(Response res) {
+        this.res = res;
+    }
+
     public Question() {
     }
 
