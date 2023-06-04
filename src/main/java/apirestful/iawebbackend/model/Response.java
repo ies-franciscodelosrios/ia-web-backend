@@ -30,7 +30,7 @@ public class Response {
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pollsAssignment_id")
     private PollsAssignment pollsAssignment;
 
@@ -49,18 +49,21 @@ public class Response {
         this.integer_Value = integer_Value;
         id_text=this.textRelation.getRelationId();
     }
-    public Response(Long id, String text_Value, int integer_Value, PollsAssignment pollassignment) {
-        Id = id;
+    public Response(int integer_Value,String text_Value, String tr_id, String pa_id ) {
         this.text_Value = text_Value;
         this.integer_Value = integer_Value;
+        tr_id= String.valueOf(this.textRelation.getRelationId());
+        pa_id=String.valueOf(this.pollsAssignment.getId());
     }
-    public Response(Long id, String text_Value, int integer_Value, PollsAssignment pollassignment, TextRelation textRelation) {
+    public Response(Long id, String text_Value, int integer_Value,TextRelation textRelation, PollsAssignment pollsAssignment) {
         Id = id;
         this.text_Value = text_Value;
         this.integer_Value = integer_Value;
         this.textRelation = textRelation;
-        this.pollsAssignment=pollassignment;
+        this.pollsAssignment=pollsAssignment;
     }
+
+
 
     public Long getId() {
         return Id;
@@ -93,6 +96,12 @@ public class Response {
     public void setTextRelation(TextRelation textRelation) {
         this.textRelation = textRelation;
     }
+
+    public void setPollsAssignment(PollsAssignment pollsAssignment) {
+        this.pollsAssignment = pollsAssignment;
+    }
+
+
 
     @Override
     public String toString() {

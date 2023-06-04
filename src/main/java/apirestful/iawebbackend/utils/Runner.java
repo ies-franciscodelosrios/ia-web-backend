@@ -38,9 +38,9 @@ public class Runner implements CommandLineRunner {
             this.rolRepository.save(adminRol);
             this.rolRepository.save(socioRol);
             this.rolRepository.save(evaluadorRol);
-            User admin = new User("001","admin","atmira","cordoba","admin@atmira.com","URL Image","admin",new BCryptPasswordEncoder().encode("admin"),"Puesto","Oficina","España",timestamp, Collections.singleton(adminRol),event,turn);
-            User socio = new User("002","socio","atmira","cordoba","socio@atmira.com","URL Image","socio",new BCryptPasswordEncoder().encode("socio"),"Puesto","Oficina","España",timestamp, Collections.singleton(socioRol),event,turn);
-            User evaluador = new User("003","evaluador","atmira","cordoba","evaluador@atmira.com","URL Image","evaluador",new BCryptPasswordEncoder().encode("evaluador"),"Puesto","Oficina","España",timestamp,Collections.singleton(evaluadorRol),event,turn);
+            User admin = new User("001","admin","atmira","cordoba","admin@atmira.com","https://res.cloudinary.com/dgzlsuwnt/image/upload/v1676912069/profile_fcw78c.jpg","admin",new BCryptPasswordEncoder().encode("admin"),"Puesto","Oficina","España",timestamp, Collections.singleton(adminRol),event,turn);
+            User socio = new User("002","socio","atmira","cordoba","socio@atmira.com","https://res.cloudinary.com/dgzlsuwnt/image/upload/v1676912069/profile_fcw78c.jpg","socio",new BCryptPasswordEncoder().encode("socio"),"Puesto","Oficina","España",timestamp, Collections.singleton(socioRol),event,turn);
+            User evaluador = new User("003","evaluador","atmira","cordoba","evaluador@atmira.com","https://res.cloudinary.com/dgzlsuwnt/image/upload/v1676912069/profile_fcw78c.jpg","evaluador",new BCryptPasswordEncoder().encode("evaluador"),"Puesto","Oficina","España",timestamp,Collections.singleton(evaluadorRol),event,turn);
             this.userRepository.save(admin);
             this.userRepository.save(socio);
             this.userRepository.save(evaluador);

@@ -48,11 +48,11 @@ public class ResponseController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @PostMapping
-    public ResponseEntity<?> createQuestion(@RequestBody Response response) {
+    public ResponseEntity<?> createQuestion(@RequestBody Response response,@RequestHeader String relation_id,String pa_id) {
         try {
             if (response != null) {
                 try {
-                    Response QGCreate = responseService.createResponse(response);
+                    Response QGCreate = responseService.createResponse(response,relation_id,pa_id);
                     return new ResponseEntity<Response>(QGCreate, new HttpHeaders(), HttpStatus.OK);
                 } catch (ResponseStatusException e) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data");

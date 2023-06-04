@@ -46,6 +46,17 @@ public class PollsAssignmentController {
         }
     }
 
+    @GetMapping("/allingPA")
+    public ResponseEntity<PollsAssignment> getPAID() throws ResponseStatusException {
+        try {
+            PollsAssignment all = pollsAssignmentService.getPAbyID("2");
+            return new ResponseEntity<PollsAssignment>(all, new HttpHeaders(), HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            PollsAssignment all = pollsAssignmentService.getPAbyID("2");
+            return new ResponseEntity<>(all, new HttpHeaders(), HttpStatus.OK);
+        }
+    }
+
 
     /**
      * @param idNavision

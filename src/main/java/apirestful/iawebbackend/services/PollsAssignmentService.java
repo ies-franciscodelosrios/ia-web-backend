@@ -1,6 +1,7 @@
 package apirestful.iawebbackend.services;
 import apirestful.iawebbackend.exceptions.RecordNotFoundException;
 import apirestful.iawebbackend.model.PollsAssignment;
+import apirestful.iawebbackend.model.Question;
 import apirestful.iawebbackend.model.QuestionaryGroup;
 import apirestful.iawebbackend.model.Poll;
 import apirestful.iawebbackend.repository.PollRepository;
@@ -88,6 +89,23 @@ public class PollsAssignmentService {
      */
     public List<PollsAssignment> getPollsAssignmentsByUser(String idNavision) {
         return pollsAssignmentRepository.pollsAssignmentsByUser(idNavision);
+    }
+
+    public PollsAssignment getPAbyID(String id) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        if (id != null && !id.isEmpty()) {
+            try {
+                PollsAssignment pollsAssignment = pollsAssignmentRepository.getPAbyID(id);
+                if(pollsAssignment!=null){
+                    return pollsAssignment;
+                }else{
+                    throw new RecordNotFoundException("The PollsAssignment with id: " + id + " dont exist");
+                }
+            } catch (Exception e) {
+                throw new IllegalArgumentException(e);
+            }
+        } else {
+            throw new NullPointerException("Null value");
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package apirestful.iawebbackend.controller;
 
+import apirestful.iawebbackend.model.Rol;
 import apirestful.iawebbackend.model.User;
 import apirestful.iawebbackend.security.UserDetailServiceImpl;
 import apirestful.iawebbackend.services.RolService;
@@ -72,8 +73,8 @@ public class RolController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("denyRolToUser")
-    public ResponseEntity<Boolean> denyRolToUser(@RequestHeader String userId, @RequestHeader Long rolId) {
+    @DeleteMapping("denyRolToUser/{userId}/{rolId}")
+    public ResponseEntity<Boolean> denyRolToUser(@PathVariable String userId, @PathVariable Long rolId) {
         try {
             if (!userId.isEmpty()) {
                 try {
@@ -203,6 +204,28 @@ public class RolController {
             }
         }catch (ResponseStatusException e){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission",e);
+        }
+    }
+
+    /**
+     * @return Get all rols
+     */
+
+    @ApiOperation(value = "Get all rols", notes = "Returns a rol list")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
+    @GetMapping("/all")
+    public ResponseEntity<List<Rol>> getAllRols() {
+        try {
+            List<Rol> all = rolService.getAllRols();
+            return new ResponseEntity<List<Rol>>(all, new HttpHeaders(), HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(e.getStatus(), e.getReason(), e);
         }
     }
 

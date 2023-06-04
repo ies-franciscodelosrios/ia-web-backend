@@ -16,4 +16,6 @@ public interface PollsAssignmentRepository extends JpaRepository<PollsAssignment
             " WHERE pa.id_navision = ? AND pa.active = 1 AND qg.active = 1 AND po.active = 1", nativeQuery = true)
     List<PollsAssignment> pollsAssignmentsByUser(String idNavision);
 
+    @Query(value = "SELECT pa.* FROM polls_assignment AS pa WHERE pa.id = ?", nativeQuery = true)
+    PollsAssignment getPAbyID(String id);
 }

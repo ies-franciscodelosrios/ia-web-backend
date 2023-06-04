@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/tr")
+@RequestMapping("/api/tr")
 public class TextRelationController {
 
 
@@ -78,14 +78,14 @@ public class TextRelationController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @GetMapping("/all/questions/user")
-    public ResponseEntity<List<Map<Question,Response>>> getAllResponsesByUserQG(@RequestHeader Long id_qg, @RequestHeader String id_navision) throws ResponseStatusException {
+    public ResponseEntity<List<Map<Question,Response>>> getAllResponsesByUserQG(@RequestHeader String id_qg, @RequestHeader String polls_assignment_id) throws ResponseStatusException {
 
         try {
-            List<Map<Question,Response>> all = textRelationService.getAllResponsesByUserSurvey(id_qg,id_navision);
+            List<Map<Question,Response>> all = textRelationService.getAllResponsesByUserSurvey(id_qg,polls_assignment_id);
             System.out.println(all);
             return new ResponseEntity<List<Map<Question,Response>>>(all, new HttpHeaders(), HttpStatus.OK);
         } catch (ResponseStatusException e) {
-            List<Map<Question,Response>> all = textRelationService.getAllResponsesByUserSurvey(id_qg,id_navision);
+            List<Map<Question,Response>> all = textRelationService.getAllResponsesByUserSurvey(id_qg,polls_assignment_id);
             return new ResponseEntity<List<Map<Question,Response>>>(all, new HttpHeaders(), HttpStatus.OK);
         }
     }
@@ -105,11 +105,31 @@ public class TextRelationController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @PostMapping
-    public ResponseEntity<?> createTR(@RequestBody TextRelation textRelation) {
+    public ResponseEntity<?> createTR(@RequestBody TextRelation textRelation, @RequestHeader String id_qg, @RequestHeader String q) {
         try {
             if (textRelation != null) {
                 try {
-                    TextRelation QGCreate = textRelationService.createTR(textRelation);
+                    TextRelation QGCreate = textRelationService.createTR(textRelation,id_qg,q);
+                    return new ResponseEntity<TextRelation>(QGCreate, new HttpHeaders(), HttpStatus.OK);
+                } catch (ResponseStatusException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data");
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The response has not found");
+            }
+        }catch (ResponseStatusException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission",e);
+        }
+
+    }
+
+
+    @GetMapping("/alling")
+    public ResponseEntity<?> gettrbyid(@RequestHeader String id_qg) {
+        try {
+            if (id_qg != null) {
+                try {
+                    TextRelation QGCreate = textRelationService.getTRbyID(id_qg);
                     return new ResponseEntity<TextRelation>(QGCreate, new HttpHeaders(), HttpStatus.OK);
                 } catch (ResponseStatusException e) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data");

@@ -18,13 +18,14 @@ public interface TextRelationRepository extends JpaRepository<TextRelation,Long>
     TextRelation getTRbyID(Long ID);
 
 
-    @Query(value = "SELECT q.text,r.text_value AS respuesta FROM response as r \n" +
-            "JOIN text_relation as tr ON r.text_relation_id=tr.relation_id \n" +
-            "JOIN questionary_group as qg ON qg.id=tr.questionary_group_id\n" +
-            "JOIN question as q ON q.id = tr.question_id\n" +
-            "JOIN polls_assignment as pa ON pa.questionary_group_id=qg.id  AND pa.id=r.polls_assignment_id\n" +
-            "WHERE qg.id=? AND pa.id_navision=?",nativeQuery = true)
-    List<Map<Question,Response>> getResponsebyQGbyUser(Long qg_id, String ID_navision);
+    @Query(value = "SELECT q.id QuestionID,q.text,q.type,r.id ResponseID,r.integer_value,r.text_value,r.text_relation_id,r.polls_assignment_id\n" +
+            "FROM text_relation AS tr\n" +
+            "JOIN questionary_group AS qg ON qg.id = tr.questionary_group_id\n" +
+            "LEFT JOIN question AS q ON q.id = tr.question_id\n" +
+            "LEFT JOIN response AS r ON r.text_relation_id = tr.relation_id\n" +
+            "WHERE tr.questionary_group_id = ? \n" +
+            "  AND (r.polls_assignment_id = ? OR r.polls_assignment_id IS NULL);", nativeQuery = true)
+    List<Map<Question,Response>> getResponsebyQGbyUser(String qg_id, String polls_assignment_id);
 
 
 }
