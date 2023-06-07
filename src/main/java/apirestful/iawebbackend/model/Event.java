@@ -31,6 +31,9 @@ public class Event {
     @NotNull
     @Column(name = "Create_date")
     private Timestamp Create_date;
+    @NotNull
+    @Column(name = "AssignByUser_id")
+    private String AssignByUser_id;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -45,6 +48,24 @@ public class Event {
         Date_Start_Event = date_Start_Event;
         Create_date = create_date;
         this.user = user;
+    }
+    public Event(Long id, String name, String description, Timestamp date_Start_Event, Timestamp create_date, User user, String assignbyuser_id) {
+        super();
+        this.id = id;
+        AssignByUser_id = assignbyuser_id;
+        Name = name;
+        Description = description;
+        Date_Start_Event = date_Start_Event;
+        Create_date = create_date;
+        this.user = user;
+    }
+
+    public String getAssignByUser_id() {
+        return AssignByUser_id;
+    }
+
+    public void setAssignByUser_id(String assignByUser_id) {
+        AssignByUser_id = assignByUser_id;
     }
 
     public Event() {}

@@ -56,11 +56,13 @@ public class UsersRelations  implements Serializable {
     @Column(name = "Active")
     private Boolean Active;
 
-    public UsersRelations(UserRelationsPK userRelationsPK, Boolean idNavisionIsPT, String personCategory, String idNavision2Name, String idNavision2Mail, String personCategory2, Boolean idNavision2IsPT, Timestamp relationCreateDate, Boolean active) {
+    public UsersRelations(UserRelationsPK userRelationsPK, Boolean idNavisionIsPT, String personCategory, String idNavisionName, String idNavisionMail, String idNavision2Name, String idNavision2Mail, String personCategory2, Boolean idNavision2IsPT, Timestamp relationCreateDate, Boolean active) {
         super();
         this.userRelationsPK = userRelationsPK;
         IdNavisionIsPT = idNavisionIsPT;
         PersonCategory = personCategory;
+        IdNavisionName = idNavisionName;
+        IdNavisionMail = idNavisionMail;
         IdNavision2Name = idNavision2Name;
         IdNavision2Mail = idNavision2Mail;
         PersonCategory2 = personCategory2;

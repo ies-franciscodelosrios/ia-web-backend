@@ -1,11 +1,15 @@
 package apirestful.iawebbackend.services;
 
 import apirestful.iawebbackend.exceptions.RecordNotFoundException;
+import apirestful.iawebbackend.model.Event;
 import apirestful.iawebbackend.model.User;
 import apirestful.iawebbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -169,6 +173,16 @@ public class UserService {
             }
         } else {
             throw new NullPointerException("Null value");
+        }
+    }
+    public ResponseEntity<User> setActiveUser(User user, String active){
+        try{
+            user.setActive(Boolean.parseBoolean(active));
+            userRepository.save(user);
+            return ResponseEntity.ok().build();
+        }catch (RecordNotFoundException ex){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The request was not processed correctly",ex);
         }
     }
 }

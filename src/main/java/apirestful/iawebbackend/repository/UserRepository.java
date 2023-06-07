@@ -13,8 +13,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query(value = "SELECT * FROM user u WHERE u.login LIKE :login", nativeQuery = true)
     User getByIdNavision(@Param("login") String login);
 
-    @Query(value = "SELECT * FROM USER AS a WHERE a.codigo LIKE ?",nativeQuery = true)
-    User getByCodigo(String codigo);
+    @Query(value = "SELECT * FROM user u WHERE u.codigo LIKE :codigo",nativeQuery = true)
+    User getByCodigo(@Param("codigo") String codigo);
 
     @Query(value = "DELETE FROM USER AS a WHERE a.codigo LIKE ?",nativeQuery = true)
     User deleteByCodigo(String codigo);

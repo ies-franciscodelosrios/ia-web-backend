@@ -126,7 +126,7 @@ public class UserRelationsController {
 
 
     /**
-     * @param id1
+     * @param idnavision
      * @return a User-Relation active by IdNavision
      * @throws ResponseStatusException
      */
@@ -139,12 +139,12 @@ public class UserRelationsController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @GetMapping("/active")
-    public ResponseEntity<List<String>> getUserRelationNamebyIDNavision(@RequestHeader String id1) throws ResponseStatusException {
+    public ResponseEntity<List<String>> getUserRelationActivebyIDNavision(@RequestHeader String idnavision) throws ResponseStatusException {
         try {
-            if (id1 != null) {
+            if (idnavision != null) {
                 try {
                     UserRelationsPK id= new UserRelationsPK();
-                    id.setIdNavision(id1);
+                    id.setIdNavision(idnavision);
                     id.setIdNavision2("");
                     List<String> ur= userRelationsService.getNameActiveRelationsByUser(id.getIdNavision());
                     return new ResponseEntity<List<String>>(ur, new HttpHeaders(), HttpStatus.OK);
@@ -173,7 +173,7 @@ public class UserRelationsController {
             @ApiResponse(code = 403, message = "No token authorised"),
             @ApiResponse(code = 500, message = "Internal Error ")
     })
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<UsersRelations> createUserRelation(@RequestBody UsersRelations userelation) throws ResponseStatusException {
         try {
             if (userelation != null) {

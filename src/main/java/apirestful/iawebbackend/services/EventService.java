@@ -2,9 +2,11 @@ package apirestful.iawebbackend.services;
 
 import apirestful.iawebbackend.exceptions.RecordNotFoundException;
 import apirestful.iawebbackend.model.Event;
+import apirestful.iawebbackend.model.EventDTO;
 import apirestful.iawebbackend.model.User;
 import apirestful.iawebbackend.repository.EventRepository;
 import apirestful.iawebbackend.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -21,6 +24,9 @@ public class EventService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     /**
      * Gets all the events from the database
@@ -35,11 +41,25 @@ public class EventService {
      * @param userId
      * @return the event of that user
      */
-    public Set<Event> getUserEvents(String userId) {
+    public List<EventDTO> getUserEvents(String userId) {
         try {
             if (userRepository.existsById(userId)) {
-                User user = userRepository.findById(userId).get();
-                return user.getEvents();
+
+                 List<Event> events = eventRepository.findEventsByUserId(userId);
+                List<EventDTO> eventDTOs = events.stream()
+                        .map(event -> {
+                            EventDTO eventDTO = modelMapper.map(event, EventDTO.class);
+                            eventDTO.setUserId(event.getUser().getCodigo()); // Obtener el user_id de la entidad Event
+                            eventDTO.setId(event.getId());
+                            eventDTO.setName(event.getName());
+                            eventDTO.setDescription(event.getDescription());
+                            eventDTO.setDateStartEvent(event.getDate_Start_Event());
+                            eventDTO.setCreateDate(event.getCreate_date());
+                            eventDTO.setAssignByUserId(event.getAssignByUser_id());
+                            return eventDTO;
+                        })
+                        .collect(Collectors.toList());
+                return eventDTOs;
             } else {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The user with userId "+userId+" not exist");
             }
@@ -54,10 +74,11 @@ public class EventService {
      * @param evento
      * @return The event created for that user
      */
-    public Event saveEvent(String userId, Event evento) {
+    public Event saveEvent(String userId,String assignByUser_id, Event evento) {
         try {
             User user = userRepository.findById(userId).get();
             evento.setUser(user);
+            evento.setAssignByUser_id(assignByUser_id);
             return eventRepository.save(evento);
         } catch (RecordNotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user exists with userId "+userId, ex);
@@ -70,7 +91,7 @@ public class EventService {
      * @param evento
      * @return The event updated
      */
-    public ResponseEntity<Event> updateEvent(Long id, Event evento){
+    public ResponseEntity<Event> updateEvent(Long id, Event evento, String assignByUser_id){
         Optional<Event> optionalEvento = eventRepository.findById(id);
         try {
             if (!optionalEvento.isPresent()) {
@@ -78,6 +99,7 @@ public class EventService {
             }
             evento.setId(optionalEvento.get().getId());
             evento.setUser(optionalEvento.get().getUser());
+            evento.setAssignByUser_id(assignByUser_id);
             eventRepository.save(evento);
             return ResponseEntity.ok().build();
         }catch (RecordNotFoundException ex){
