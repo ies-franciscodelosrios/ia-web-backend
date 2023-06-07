@@ -93,6 +93,10 @@ public class Response {
         return textRelation;
     }
 
+    public PollsAssignment getPollsAssignment() {
+        return pollsAssignment;
+    }
+
     public void setTextRelation(TextRelation textRelation) {
         this.textRelation = textRelation;
     }

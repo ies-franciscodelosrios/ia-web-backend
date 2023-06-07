@@ -57,7 +57,7 @@ public class TextRelationController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @GetMapping("/all/questions")
-    public ResponseEntity<List<Question>> getAllQuestionsBySurvey(@RequestHeader Long id_qg) throws ResponseStatusException {
+    public ResponseEntity<List<Question>> getAllQuestionsBySurvey       (@RequestHeader Long id_qg) throws ResponseStatusException {
 
         try {
             List<Question> all = textRelationService.getAllQuestionsBySurvey(id_qg);

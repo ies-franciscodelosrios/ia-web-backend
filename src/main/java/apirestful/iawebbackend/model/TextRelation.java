@@ -76,6 +76,8 @@ public class TextRelation {
     }
 
 
+
+
     public void setResponse(Response response) {
         this.response = response;
     }
