@@ -74,7 +74,7 @@ public class UserRelationsService {
             if (pk != null) {
                 try {
                     UsersRelations ur = userRelationsRepository.getReferenceById(pk);
-                    ur.setActive(false);
+                    ur.setActive(!ur.getActive());
                     userRelationsRepository.save(ur);
                     return ur;
                 } catch (IllegalArgumentException e) {

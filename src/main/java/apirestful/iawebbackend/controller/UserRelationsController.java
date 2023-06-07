@@ -61,8 +61,8 @@ public class UserRelationsController {
             @ApiResponse(code = 403, message = "No token authorised"),
             @ApiResponse(code = 500, message = "Internal Error ")
     })
-    @PutMapping
-    public ResponseEntity<UsersRelations> updateUserRelation(@RequestHeader String id1, @RequestHeader String id2) throws ResponseStatusException {
+    @PutMapping("/{id1}/{id2}")
+    public ResponseEntity<UsersRelations> updateUserRelation(@PathVariable String id1, @PathVariable String id2) throws ResponseStatusException {
         try {
             if (id1 != null) {
                 try {

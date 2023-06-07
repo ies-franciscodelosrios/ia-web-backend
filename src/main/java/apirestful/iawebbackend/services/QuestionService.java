@@ -128,5 +128,7 @@ public class QuestionService {
     }
 
 
-
+    public List<Question> getAllQuestions() {
+        return questionRepository.findAll();
+    }
 }

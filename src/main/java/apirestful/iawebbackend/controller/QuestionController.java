@@ -16,11 +16,31 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/question")
+@RequestMapping("/api/question")
 public class QuestionController {
 
     @Autowired
     private QuestionService questionService;
+
+    @ApiOperation(value = "Get all questions", notes = "Return list of all questions")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
+    @GetMapping("/all")
+    public ResponseEntity<List<Question>> getAllQuestions() throws ResponseStatusException {
+        try {
+            List<Question> all = questionService.getAllQuestions();
+            System.out.println(all);
+            return new ResponseEntity<List<Question>>(all, new HttpHeaders(), HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            List<Question> all = questionService.getAllQuestions();
+            return new ResponseEntity<>(all, new HttpHeaders(), HttpStatus.OK);
+        }
+    }
 
     /**
      * @param question
