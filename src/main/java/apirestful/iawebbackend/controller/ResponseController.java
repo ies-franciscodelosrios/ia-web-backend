@@ -15,21 +15,22 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.annotation.Repeatable;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/response")
+@RequestMapping("/api/response")
 public class ResponseController {
 
     @Autowired
     private ResponseService responseService;
     @GetMapping("/all")
-    public ResponseEntity<List<Response>> getQG() throws ResponseStatusException {
+    public ResponseEntity<Optional<Response>> getQG() throws ResponseStatusException {
         try {
-            List<Response> all = responseService.getAllResponses();
+            Optional<Response> all = responseService.getAllResponses();
             System.out.println(all);
-            return new ResponseEntity<List<Response>>(all, new HttpHeaders(), HttpStatus.OK);
+            return new ResponseEntity<Optional<Response>>(all, new HttpHeaders(), HttpStatus.OK);
         } catch (ResponseStatusException e) {
-            List<Response> all = responseService.getAllResponses();
+            Optional<Response> all = responseService.getAllResponses();
             return new ResponseEntity<>(all, new HttpHeaders(), HttpStatus.OK);
         }
     }
@@ -48,21 +49,20 @@ public class ResponseController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @PostMapping
-    public ResponseEntity<?> createQuestion(@RequestBody Response response,@RequestHeader String relation_id,String pa_id) {
+    public void createQuestion(@RequestBody Response response, @RequestHeader int pa_id) {
         try {
             if (response != null) {
                 try {
-                    Response QGCreate = responseService.createResponse(response,relation_id,pa_id);
-                    return new ResponseEntity<Response>(QGCreate, new HttpHeaders(), HttpStatus.OK);
+                    responseService.createResponse(response, pa_id);
                 } catch (ResponseStatusException e) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data");
                 }
             } else {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The response has not found");
             }
-        }catch (ResponseStatusException e){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission",e);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission", e);
         }
-
     }
+
 }
