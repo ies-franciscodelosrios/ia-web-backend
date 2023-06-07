@@ -12,12 +12,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @Api(tags = "User")
 @RequestMapping("/api/user")
 public class UserController {
+
+    @Autowired
+    private HttpSession httpSession;
     @Autowired
     private UserService userService;
 
@@ -61,9 +67,9 @@ public class UserController {
     public ResponseEntity<User> getUserById(@RequestHeader String codigo) throws ResponseStatusException {
            try{
             if (codigo!=null && !codigo.isEmpty()){
-                User search = userService.getUserByDNI(codigo);
-                if (search!=null) {
-                    return new ResponseEntity<>(search, HttpStatus.OK);
+                User user = userService.getUserByDNI(codigo);
+                if (user!=null) {
+                    return new ResponseEntity<>(user, HttpStatus.OK);
                 } else {
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user has not found");
                 }
@@ -197,6 +203,38 @@ public class UserController {
                 }
             } else {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user has not found");
+            }
+        }catch (ResponseStatusException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission",e);
+        }
+    }
+    /**
+     * @param idnavision
+     * @param active
+     * @return A user with attribute active modified
+     * @throws ResponseStatusException
+     */
+    @ApiOperation(value = "Active a user by IDnavision", notes = "Return a user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
+    @PutMapping ("/active")
+    public ResponseEntity<?> ActiveUser(@RequestHeader String idnavision, @RequestHeader String active) {
+        try{
+            if (idnavision!=null && !idnavision.isEmpty()){
+                User user = userService.getUserByIdNavision(idnavision);
+                if (user!=null && !active.isEmpty()) {
+                    userService.setActiveUser(user,active);
+                    return new ResponseEntity <> (user, HttpStatus.OK);
+                } else {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The user has not found");
+                }
+            }else{
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data");
             }
         }catch (ResponseStatusException e){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission",e);

@@ -48,6 +48,10 @@ public class User {
     @Column(name = "Create_date",length = 50)
     private Timestamp Create_date;
 
+    @NotNull
+    @Column(name = "Active")
+    private Boolean Active;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_rols",
@@ -61,6 +65,25 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Turn> turns = new HashSet<>();
+
+    public User(String codigo, String name, String apellido1, String apellido2, String email, String profile_Picture, String login, String password, String puesto, String oficina, String pais, Timestamp create_date, Set<Rol> rols, Set<Event> events, Set<Turn> turns ,Boolean active) {
+        Codigo = codigo;
+        Name = name;
+        Apellido1 = apellido1;
+        Apellido2 = apellido2;
+        Email = email;
+        Profile_Picture = profile_Picture;
+        Login = login;
+        Password = password;
+        Puesto = puesto;
+        Oficina = oficina;
+        Pais = pais;
+        Create_date = create_date;
+        this.rols = rols;
+        this.events = events;
+        this.turns = turns;
+        Active = active;
+    }
 
     public User(String codigo, String name, String apellido1, String apellido2, String email, String profile_Picture, String login, String password, String puesto, String oficina, String pais, Timestamp create_date, Set<Rol> rols, Set<Event> events, Set<Turn> turns) {
         Codigo = codigo;
@@ -78,6 +101,14 @@ public class User {
         this.rols = rols;
         this.events = events;
         this.turns = turns;
+    }
+
+    public Boolean getActive() {
+        return Active;
+    }
+
+    public void setActive(Boolean active) {
+        Active = active;
     }
 
     public User() {}

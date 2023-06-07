@@ -1,9 +1,12 @@
 package apirestful.iawebbackend.controller;
 import apirestful.iawebbackend.exceptions.RecordNotFoundException;
+import apirestful.iawebbackend.exceptions.RestError;
 import apirestful.iawebbackend.model.Event;
+import apirestful.iawebbackend.model.EventDTO;
 import apirestful.iawebbackend.security.UserDetailServiceImpl;
 import apirestful.iawebbackend.services.EventService;
 import io.swagger.annotations.*;
+import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -63,10 +66,10 @@ public class EventController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @GetMapping(path ="/user/")
-    public ResponseEntity<Set<Event>> getUserEvents(@RequestHeader String userId){
+    public ResponseEntity<List<EventDTO>> getUserEvents(@RequestHeader String userId){
         try {
             if (eventService.getUserEvents(userId).size() >=0) {
-                return new ResponseEntity<Set<Event>>(eventService.getUserEvents(userId), new HttpHeaders(), HttpStatus.OK);
+                return new ResponseEntity<List<EventDTO>>(eventService.getUserEvents(userId), new HttpHeaders(), HttpStatus.OK);
             }else{
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User not exists with this userId "+userId);
             }
@@ -89,10 +92,10 @@ public class EventController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @PostMapping(path = "/save/assignUser/")
-    public ResponseEntity<Event> saveEvent(@RequestBody Event evento, @RequestHeader String userId ){
+    public ResponseEntity<Event> saveEvent(@RequestBody Event evento, @RequestHeader String userId, @RequestHeader String assignByUser_id ){
         try {
-            if (userId != null || eventService.getUserEvents(userId).size() >0) {
-                return new ResponseEntity<Event>(this.eventService.saveEvent(userId, evento), new HttpHeaders(), HttpStatus.CREATED);
+            if (userId != null && evento !=null) {
+                return new ResponseEntity<Event>(this.eventService.saveEvent(userId,assignByUser_id, evento), new HttpHeaders(), HttpStatus.CREATED);
             }else{
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -116,10 +119,10 @@ public class EventController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @PutMapping(path = "/update/")
-    public ResponseEntity<Event> editEvent(@RequestHeader Long id, @RequestBody Event evento){
+    public ResponseEntity<Event> editEvent(@RequestHeader Long id, @RequestBody Event evento,  @RequestHeader String assignByUser_id){
         try {
             if (evento !=null && this.eventService.getEventById(id).isPresent()) {
-                return new ResponseEntity<Event>(this.eventService.updateEvent(id, evento).getBody(),new HttpHeaders(),HttpStatus.OK);
+                return new ResponseEntity<Event>(this.eventService.updateEvent(id, evento, assignByUser_id).getBody(),new HttpHeaders(),HttpStatus.OK);
             } else {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No event exist with id "+id);
             }
@@ -214,10 +217,12 @@ public class EventController {
             @ApiResponse(code = 500, message = "Internal Error ")
     })
     @DeleteMapping(path = "/delete/user/")
-    public ResponseEntity deleteEventByUser(@RequestHeader String userId, @RequestHeader Long eventId){
+    public ResponseEntity<Object> deleteEventByUser(@RequestHeader String userId, @RequestHeader Long eventId){
         try {
             if(eventService.deleteUserEvent(userId,eventId)){
-                return new ResponseEntity("Message : The event with id "+eventId+" of user "+userId+" was deleted ",HttpStatus.OK);
+                JSONObject responseJson = new JSONObject();
+                responseJson.put("message", "The event with id "+eventId+" of user "+userId+" was deleted ");
+                return ResponseEntity.ok().body( responseJson.toString());
             }else{
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The user or event not exist");
             }

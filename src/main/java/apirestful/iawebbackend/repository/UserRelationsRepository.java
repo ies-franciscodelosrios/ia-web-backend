@@ -16,7 +16,7 @@ public interface UserRelationsRepository extends JpaRepository<UsersRelations, U
     String getActivateRelations(String idnavision);
 
 
-    @Query(value = "SELECT id_navision2 FROM users_relations WHERE users_relations.id_navision LIKE ?",nativeQuery = true)
+    @Query(value = "SELECT id_navision2 FROM users_relations WHERE id_navision =?1 AND active = 1",nativeQuery = true)
     List<String> getActivateRelationsName(String idnavision);
 }
 
