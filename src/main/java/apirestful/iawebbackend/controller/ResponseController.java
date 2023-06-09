@@ -23,6 +23,16 @@ public class ResponseController {
 
     @Autowired
     private ResponseService responseService;
+
+
+    @ApiOperation(value = "Get all questions", notes = "Return a question with a data")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
     @GetMapping("/all")
     public ResponseEntity<Optional<Response>> getQG() throws ResponseStatusException {
         try {

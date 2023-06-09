@@ -123,7 +123,14 @@ public class TextRelationController {
 
     }
 
-
+    @ApiOperation(value = "Get a Text-Relation by ID", notes = "Return a text-relation with a data")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully petition"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 403, message = "No token authorised"),
+            @ApiResponse(code = 500, message = "Internal Error ")
+    })
     @GetMapping("/alling")
     public ResponseEntity<?> gettrbyid(@RequestHeader String id_qg) {
         try {
