@@ -139,4 +139,21 @@ public class UserRelationsService {
            throw new NullPointerException("Null value"+ e);
        }
     }
+
+    public List<String> getNameActiveRelationsBySocio(String pk) throws RecordNotFoundException, NullPointerException, IllegalArgumentException {
+        try {
+            if (pk != null) {
+                try {
+                    List<String> ur = userRelationsRepository.getActivateSocioRelationsName(pk);
+                    return ur;
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }else{
+                throw new RecordNotFoundException("Dont have User-Relation");
+            }
+        }catch (NullPointerException e){
+            throw new NullPointerException("Null value"+ e);
+        }
+    }
 }

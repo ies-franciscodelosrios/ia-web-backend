@@ -159,6 +159,28 @@ public class UserRelationsController {
         }
     }
 
+    @GetMapping("/active/socio")
+    public ResponseEntity<List<String>> getSocioRelationActivebyIDNavision(@RequestHeader String idnavision) throws ResponseStatusException {
+        try {
+            if (idnavision != null) {
+                try {
+                    UserRelationsPK id= new UserRelationsPK();
+                    id.setIdNavision(idnavision);
+                    id.setIdNavision2("");
+                    List<String> ur= userRelationsService.getNameActiveRelationsBySocio(id.getIdNavision());
+                    return new ResponseEntity<List<String>>(ur, new HttpHeaders(), HttpStatus.OK);
+                } catch (ResponseStatusException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data "+e);
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The User-Relation has not found");
+            }
+        }catch (ResponseStatusException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "The request has failed by permission",e);
+        }
+    }
+
+
 
     /**
      * @param userelation
