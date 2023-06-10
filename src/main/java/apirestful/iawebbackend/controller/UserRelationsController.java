@@ -144,9 +144,9 @@ public class UserRelationsController {
             if (idnavision != null) {
                 try {
                     UserRelationsPK id= new UserRelationsPK();
-                    id.setIdNavision(idnavision);
-                    id.setIdNavision2("");
-                    List<String> ur= userRelationsService.getNameActiveRelationsByUser(id.getIdNavision());
+                    id.setIdNavision("");
+                    id.setIdNavision2(idnavision);
+                    List<String> ur= userRelationsService.getNameActiveRelationsByUser(id.getIdNavision2());
                     return new ResponseEntity<List<String>>(ur, new HttpHeaders(), HttpStatus.OK);
                 } catch (ResponseStatusException e) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request has failed by data "+e);
